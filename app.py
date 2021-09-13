@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, jsonify
 
 app = Flask(__name__)
 
@@ -23,8 +23,10 @@ def finish_lesson():
 def get_readings():
     with open('static/readings.txt', 'r') as file:
         readings = file.readlines()
+    response = jsonify(readings[-1])
+    # response.headers.add("Access-Control-Allow-Origin", "*")
 
-    return readings[-1]
+    return response
 
 
 # Adding headers to the response
