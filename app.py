@@ -9,10 +9,9 @@ def hello_world():  # put application's code here
 
 
 # Move to next lesson call
-@app.route('/api/v1/get_data', methods=["POST", "GET"])
-def finish_lesson():
+@app.route('/api/v1/receive_data', methods=["POST", "GET"])
+def receive_data():
     response = request.get_json()
-    print(response)
     with open('static/readings.txt', 'a') as file:
         file.write("\n")
         file.write(response["data"])
@@ -24,7 +23,6 @@ def get_readings():
     with open('static/readings.txt', 'r') as file:
         readings = file.readlines()
     response = jsonify(readings[-1])
-    # response.headers.add("Access-Control-Allow-Origin", "*")
 
     return response
 
