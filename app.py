@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, render_template
 
 app = Flask(__name__)
 
@@ -25,6 +25,15 @@ def get_readings():
         readings = file.readlines()
 
     return readings[-1]
+
+
+# Adding headers to the response
+@app.after_request
+def add_headers(response):
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Headers',
+                         'Content-Type,Authorization')
+    return response
 
 
 if __name__ == '__main__':
