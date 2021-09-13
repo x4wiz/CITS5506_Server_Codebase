@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+  {{ super() }}
+  <style type="text/css">
+    .important { color: #336699; }
+  </style>
+{% endblock %}
+{% block content %}
+  <h1>Index</h1>
+  <p class="important">
+    Here's some sensor readings from my device
+	  <p id = "reading"></p>
+	<button onclick="get_data()">get data</button>
+
+	<script>
+		base_path = 'http://127.0.0.1:5000/api/v1'
+
+		const get_data = async () => {
+		    $.ajax({
+		        url: `${base_path}/get_readings`,
+		        type: "GET",
+		        contentType: "application/json",
+		    }).done(data => {
+		        console.log(data)
+				    document.getElementById("reading").innerText = data
+		    });
+		}
+	</script>
+
+{#	<script src="{{ url_for('static', filename='js/get_data.js') }}"></script>#}
+{% endblock %}
