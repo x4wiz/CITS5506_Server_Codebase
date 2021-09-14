@@ -1,42 +1,65 @@
 {% extends "base.html" %}
 {% block title %}Index{% endblock %}
 {% block head %}
-  {{ super() }}
-  <style type="text/css">
-    .important { color: #336699; }
-  </style>
+	{{ super() }}
+	<style type="text/css">
+      .important {
+          color: #336699;
+      }
+	</style>
 {% endblock %}
 {% block content %}
-  <h1>Index</h1>
-  <p class="important">
-    Here's some sensor readings from my device
-	  <p id = "reading"></p>
-	<button onclick="get_data()">get data</button>
+	<h1>Air quality monitor</h1>
+	<p class="important">
+		Here's some sensor readings from my device
+	<p id="reading"></p>
+	<button onclick="get_data()">Update data</button>
 	<button onclick="live_data()">Constant update</button>
+	<br>
+	<div>
+		<label for="readings_interval">Set readings interval in seconds</label>
+		<input type="number" min="3" id="readings_interval"><br>
+		<button onclick="set_interval()">Set interval</button>
+	</div>
+
+
 
 	<script>
-		base_path = 'https://smart-air-quality.herokuapp.com/api/v1' //remote
-		{#base_path = 'http://192.168.1.101:5000/api/v1' //local#}
-		live_update_on = true
+      {#base_path = 'https://smart-air-quality.herokuapp.com/api/v1' //remote#}
+      base_path = 'http://192.168.1.100:5000/api/v1' //local
+      live_update_on = true
 
-		const live_data = () => {
-		    if (live_update_on) {
-		        setInterval(get_data, 1000*5)
-		    }
+      const set_interval = () => {
+          let interval = document.getElementById("readings_interval").value
+		      $.ajax({
+		          url: `${base_path}/set_readings_interval`,
+              type: "POST",
+              contentType: "application/json",
+		          data: JSON.stringify({
+				         interval
+              })
+          })
+		      console.log(interval)
+      }
 
-		}
+      const live_data = () => {
+          if (live_update_on) {
+              setInterval(get_data, 1000 * 5)
+          }
 
-		const get_data = async () => {
-		    $.ajax({
-		        url: `${base_path}/get_readings`,
-		        type: "GET",
-		        contentType: "application/json",
-		    }).done(data => {
-		        console.log(data)
-				    document.getElementById("reading").innerText = data
-		    });
-		}
+      }
+
+      const get_data = async () => {
+          $.ajax({
+              url: `${base_path}/get_readings`,
+              type: "GET",
+              contentType: "application/json",
+          }).done(data => {
+              console.log(data)
+              document.getElementById("reading").innerText = data
+          });
+      }
 	</script>
 
-{#	<script src="{{ url_for('static', filename='js/get_data.js') }}"></script>#}
+	{#	<script src="{{ url_for('static', filename='js/get_data.js') }}"></script>#}
 {% endblock %}
