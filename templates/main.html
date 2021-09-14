@@ -9,17 +9,41 @@
 	</style>
 {% endblock %}
 {% block content %}
-	<h1>Air quality monitor</h1>
-	<p class="important">
-		Here's some sensor readings from my device
-	<p id="reading"></p>
-	<button onclick="get_data()">Update data</button>
-	<button onclick="live_data()">Constant update</button>
-	<br>
-	<div>
-		<label for="readings_interval">Set readings interval in seconds</label>
-		<input type="number" min="3" id="readings_interval"><br>
-		<button onclick="set_interval()">Set interval</button>
+	<div class="container mx-auto px-4 flex justify-center">
+		<div class="m-4 p-6 shadow rounded bg-gray-50">
+
+			<h1 class="text-5xl">Air quality monitor</h1>
+			<p class="important">
+				Here's some sensor readings from my device
+
+			<div>
+				<p id="temperature_c"></p>
+				<p id="humidity"></p>
+				<p id="reading_date"></p>
+				<p id="reading_time"></p>
+			</div>
+
+			<button type="button" onclick="get_data()" class="border-2 p-2
+			m-2 hover:bg-gray-50 text-xl">Update
+			                              data
+			</button>
+			<button onclick="live_data()"
+			        class="border-2 p-2
+			m-2  hover:bg-gray-50 text-xl">
+				Constant update
+			</button>
+			<br>
+			<div>
+				<label for="readings_interval">Set readings interval in
+				                               seconds</label><br>
+				<input class="border-2 p-2
+			m-2 hover:bg-gray-50 text-xl" type="number" min="3"
+				       id="readings_interval"><br>
+				<button onclick="set_interval()" class="border-2 p-2
+			m-2 text-xl hover:bg-gray-50">Set interval
+				</button>
+			</div>
+		</div>
 	</div>
 
 
@@ -31,15 +55,15 @@
 
       const set_interval = () => {
           let interval = document.getElementById("readings_interval").value
-		      $.ajax({
-		          url: `${base_path}/set_readings_interval`,
+          $.ajax({
+              url: `${base_path}/set_readings_interval`,
               type: "POST",
               contentType: "application/json",
-		          data: JSON.stringify({
-				         interval
+              data: JSON.stringify({
+                  interval
               })
           })
-		      console.log(interval)
+          console.log(interval)
       }
 
       const live_data = () => {
@@ -55,8 +79,16 @@
               type: "GET",
               contentType: "application/json",
           }).done(data => {
-              console.log(data)
-              document.getElementById("reading").innerText = data
+
+		          let data_arr = data.split(" ")
+		          console.log(data_arr)
+              document.getElementById("temperature_c").innerText = data_arr[0]
+		          document.getElementById("humidity").innerText = data_arr[1]
+		          document.getElementById("reading_date").innerText =
+				          data_arr[4] + " " + data_arr[3] + " " + data_arr[6]
+		          document.getElementById("reading_date").innerText = data_arr[5]
+
+
           });
       }
 	</script>
