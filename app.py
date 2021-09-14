@@ -33,7 +33,6 @@ def get_readings_interval():
         # response = jsonify(readings)
         print(response)
     return response
-
 @app.route('/api/v1/set_readings_interval', methods=["POST", "GET"])
 def set_readings_interval():
     response = request.get_json()
