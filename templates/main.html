@@ -13,85 +13,117 @@
 		<div class="m-4 p-6 shadow rounded bg-gray-50">
 
 			<h1 class="text-5xl">Air quality monitor</h1>
-			<p class="important">
-				Here's some sensor readings from my device
 
-			<div>
-				<p id="temperature_c"></p>
-				<p id="humidity"></p>
-				<p id="reading_date"></p>
-				<p id="reading_time"></p>
+			<div id="latest_data" class="p-2 border-1 shadow m-2">
+				<table class="p-2 text-xl">
+					<tr>
+						<td>
+							<p>Temperature C: </p>
+						</td>
+						<td class="pl-4">
+							<p id="temperature_c">
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<p>Humidity:</p>
+						</td>
+						<td class="pl-4">
+							<p id="humidity"></p>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<p>Date:</p>
+
+						</td>
+						<td class="pl-4">
+							<p id="reading_date"></p>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<p>Time: </p>
+						</td>
+						<td class="pl-4">
+							<p id="reading_time"></p>
+						</td>
+					</tr>
+
+				</table>
 			</div>
 
-			<button type="button" onclick="get_data()" class="border-2 p-2
-			m-2 hover:bg-gray-50 text-xl">Update
-			                              data
-			</button>
-			<button onclick="live_data()"
-			        class="border-2 p-2
-			m-2  hover:bg-gray-50 text-xl">
-				Constant update
-			</button>
-			<br>
-			<div>
-				<label for="readings_interval">Set readings interval in
-				                               seconds</label><br>
-				<input class="border-2 p-2
-			m-2 hover:bg-gray-50 text-xl" type="number" min="3"
-				       id="readings_interval"><br>
-				<button onclick="set_interval()" class="border-2 p-2
-			m-2 text-xl hover:bg-gray-50">Set interval
+			<div id="controls" class="border-1 shadow m-2 p-2 mt-5">
+				<button type="button" onclick="get_data()" class="border-2 p-2
+			m-2 hover:bg-gray-50 text-l">Update
+				                            data
 				</button>
+				<button onclick="live_data()"
+				        class="border-2 p-2
+			m-2  hover:bg-gray-50 text-l">
+					Constant update
+				</button>
+				<br>
+				<div>
+					<label for="readings_interval" class="p-2 m-2">Set readings
+					                                              interval in
+					                               seconds</label><br>
+					<input class="border-2 p-2
+			m-2 hover:bg-gray-50 text-l" type="number" min="3"
+					       id="readings_interval"><br>
+					<button onclick="set_interval()" class="border-2 p-2
+			m-2 text-l hover:bg-gray-50">Set interval
+					</button>
+				</div>
 			</div>
 		</div>
-	</div>
 
 
+		<script>
+        base_path = 'https://smart-air-quality.herokuapp.com/api/v1' //remote
+        {#base_path = 'http://192.168.1.122:5000/api/v1' //local#}
+        live_update_on = true
 
-	<script>
-      base_path = 'https://smart-air-quality.herokuapp.com/api/v1' //remote
-      {#base_path = 'http://192.168.1.122:5000/api/v1' //local#}
-      live_update_on = true
+        const set_interval = () => {
+            let interval = document.getElementById("readings_interval").value
+            $.ajax({
+                url: `${base_path}/set_readings_interval`,
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    interval
+                })
+            })
+            console.log(interval)
+        }
 
-      const set_interval = () => {
-          let interval = document.getElementById("readings_interval").value
-          $.ajax({
-              url: `${base_path}/set_readings_interval`,
-              type: "POST",
-              contentType: "application/json",
-              data: JSON.stringify({
-                  interval
-              })
-          })
-          console.log(interval)
-      }
+        const live_data = () => {
+            if (live_update_on) {
+                setInterval(get_data, 1000 * 5)
+            }
 
-      const live_data = () => {
-          if (live_update_on) {
-              setInterval(get_data, 1000 * 5)
-          }
+        }
 
-      }
+        const get_data = async () => {
+            $.ajax({
+                url: `${base_path}/get_readings`,
+                type: "GET",
+                contentType: "application/json",
+            }).done(data => {
 
-      const get_data = async () => {
-          $.ajax({
-              url: `${base_path}/get_readings`,
-              type: "GET",
-              contentType: "application/json",
-          }).done(data => {
-
-		          let data_arr = data.split(" ")
-		          console.log(data_arr)
-              document.getElementById("temperature_c").innerText = data_arr[0]
-		          document.getElementById("humidity").innerText = data_arr[1]
-		          document.getElementById("reading_date").innerText =
-				          data_arr[4] + " " + data_arr[3] + " " + data_arr[6]
-		          document.getElementById("reading_date").innerText = data_arr[5]
+                let data_arr = data.split(" ")
+                console.log(data_arr)
+                let date = `${data_arr[4]} ${data_arr[3]} ${data_arr[6]}`
+                document.getElementById("temperature_c").innerText = data_arr[0]
+                document.getElementById("humidity").innerText = data_arr[1]
+                document.getElementById("reading_date").innerText = date
+                document.getElementById("reading_time").innerText =
+                    data_arr[5].toString()
 
 
-          });
-      }
-	</script>
+            });
+        }
+		</script>
 
-	{#	<script src="{{ url_for('static', filename='js/get_data.js') }}"></script>#}
+		{#	<script src="{{ url_for('static', filename='js/get_data.js') }}"></script>#}
 {% endblock %}

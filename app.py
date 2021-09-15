@@ -26,6 +26,7 @@ def get_readings():
 
     return response
 
+
 @app.route('/api/v1/get_readings_interval', methods=["POST", "GET"])
 def get_readings_interval():
     with open('static/settings.txt', 'r') as file:
@@ -33,12 +34,13 @@ def get_readings_interval():
         # response = jsonify(readings)
         print(response)
     return response
+
+
 @app.route('/api/v1/set_readings_interval', methods=["POST", "GET"])
 def set_readings_interval():
     response = request.get_json()
     print(response)
     with open('static/settings.txt', 'w') as file:
-
         file.write(response["interval"])
     return response
 
