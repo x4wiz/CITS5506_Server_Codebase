@@ -3,7 +3,7 @@ module.exports = {
       './static/src/**/*.html',
     './static/src/**/*.vue',
     './static/src/**/*.jsx',
-      './templates/**/*.html',
+      './templates/*.html',
   ],
   darkMode: false, // or 'media' or 'class'
   theme: {
