@@ -14,7 +14,7 @@ css.build()
 
 
 @app.route('/')
-def hello_world():  # put application's code here
+def hello_world():
     return render_template('main.html', title='Home')
 
 

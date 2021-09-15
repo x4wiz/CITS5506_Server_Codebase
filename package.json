@@ -2,6 +2,10 @@
   "dependencies": {
     "@fullhuman/postcss-purgecss": "^4.0.3",
     "cssnano": "^5.0.8",
-    "jquery": "^3.6.0"
+    "jquery": "^3.6.0",
+    "tailwindcss": "^2.2.15"
+  },
+   "scripts": {
+    "build": "postcss css/tailwind.css -o ./static/dist/main.css"
   }
 }
