@@ -6,6 +6,6 @@
     "tailwindcss": "^2.2.15"
   },
    "scripts": {
-    "build": "postcss css/tailwind.css -o ./static/dist/main.css"
+    "build": "postcss /static/src/main.css -o /static/dist/main.css"
   }
 }
