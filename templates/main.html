@@ -56,9 +56,9 @@
 			<div id="controls" class="border-1 shadow m-2 p-2 mt-5">
 				<button type="button" onclick="get_data()" class="border-2 p-2
 			m-2 hover:bg-gray-50 text-l">Update
-				                            data
+				                           once
 				</button>
-				<button onclick="live_data()"
+				<button id = "const_upd" onclick="live_data()"
 				        class="border-2 p-2
 			m-2  hover:bg-gray-50 text-l">
 					Constant update
@@ -66,23 +66,29 @@
 				<br>
 				<div>
 					<label for="readings_interval" class="p-2 m-2">Set readings
-					                                              interval in
-					                               seconds</label><br>
+					                                               interval in
+					                                               seconds</label><br>
 					<input class="border-2 p-2
 			m-2 hover:bg-gray-50 text-l" type="number" min="3"
 					       id="readings_interval"><br>
 					<button onclick="set_interval()" class="border-2 p-2
 			m-2 text-l hover:bg-gray-50">Set interval
 					</button>
+					<div class="flex flex-row p-2 text-xl">
+						<p class="">Current interval (sec): </p>
+						<p id="cur_interval" class="pl-4">10</p>
+					</div>
 				</div>
 			</div>
 		</div>
 
 
 		<script>
-        base_path = 'https://smart-air-quality.herokuapp.com/api/v1' //remote
+        let base_path = 'https://smart-air-quality.herokuapp.com/api/v1'
+        //remote
         {#base_path = 'http://192.168.1.122:5000/api/v1' //local#}
-        live_update_on = true
+        let live_update_on = false
+        let updating
 
         const set_interval = () => {
             let interval = document.getElementById("readings_interval").value
@@ -97,9 +103,30 @@
             console.log(interval)
         }
 
+        const get_interval = () => {
+            $.ajax({
+                url: `${base_path}/get_readings_interval`,
+                type: "GET",
+                contentType: "application/json",
+            }).done(data => {
+                console.log(data)
+                document.getElementById("cur_interval").innerText = data
+
+            })
+
+        }
+
         const live_data = () => {
-            if (live_update_on) {
-                setInterval(get_data, 1000 * 5)
+
+
+            if (!live_update_on) {
+                live_update_on = true
+                updating = setInterval(get_data, 1000 * 3)
+		            document.getElementById("const_upd").classList.add("bg-green-100")
+            } else {
+                live_update_on = false
+		            clearTimeout(updating)
+		            document.getElementById("const_upd").classList.remove("bg-green-100")
             }
 
         }
@@ -123,7 +150,10 @@
 
             });
         }
+        window.onload = () => {
+            setInterval(get_interval, 1000 * 3)
+        }
 		</script>
-
-		{#	<script src="{{ url_for('static', filename='js/get_data.js') }}"></script>#}
+	</div>
+	{#	<script src="{{ url_for('static', filename='js/get_data.js') }}"></script>#}
 {% endblock %}
