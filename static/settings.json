@@ -1,0 +1,6 @@
+{
+    "alarm": false,
+    "interval": 13,
+    "readings_on": true,
+    "stop_alarm": false
+}

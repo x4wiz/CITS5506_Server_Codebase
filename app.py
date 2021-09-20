@@ -1,6 +1,9 @@
-from flask import Flask, request, render_template, jsonify
+import json
 
+from flask import Flask, request, render_template, jsonify
 from flask_assets import Bundle, Environment
+
+from functions.helpers import analise_co2_over1000
 
 app = Flask(__name__)
 
@@ -25,6 +28,22 @@ def receive_data():
     with open('static/readings.txt', 'a') as file:
         file.write("\n")
         file.write(response["data"])
+
+    if analise_co2_over1000():
+        with open('static/settings.json', 'r+') as file:
+            data = json.load(file)
+            data["alarm"] = True
+            file.seek(0)
+            json.dump(data, file, indent=4)
+            file.truncate()
+    else:
+        with open('static/settings.json', 'r+') as file:
+            data = json.load(file)
+            data["alarm"] = False
+            data["stop_alarm"] = False
+            file.seek(0)
+            json.dump(data, file, indent=4)
+            file.truncate()
     return response
 
 
@@ -37,12 +56,11 @@ def get_readings():
     return response
 
 
-@app.route('/api/v1/get_readings_interval', methods=["POST", "GET"])
-def get_readings_interval():
-    with open('static/settings.txt', 'r') as file:
-        response = file.readlines()[-1]
-        # response = jsonify(readings)
-        print(response)
+@app.route('/api/v1/get_settings', methods=["POST", "GET"])
+def get_settings():
+    with open('static/settings.json') as file:
+        data = json.load(file)
+        response = data
     return response
 
 
@@ -50,8 +68,26 @@ def get_readings_interval():
 def set_readings_interval():
     response = request.get_json()
     print(response)
-    with open('static/settings.txt', 'w') as file:
-        file.write(response["interval"])
+    with open('static/settings.json', 'r+') as file:
+        data = json.load(file)
+        data["interval"] = int(response["interval"])
+        file.seek(0)
+        json.dump(data, file, indent=4)
+        file.truncate()
+    return response
+
+
+@app.route('/api/v1/stop_alarm', methods=["POST", "GET"])
+def stop_alarm():
+    response = request.get_json()
+    print(response)
+    with open('static/settings.json', 'r+') as file:
+        data = json.load(file)
+        data["stop_alarm"] = True
+        print(data)
+        file.seek(0)
+        json.dump(data, file, indent=4)
+        file.truncate()
     return response
 
 
