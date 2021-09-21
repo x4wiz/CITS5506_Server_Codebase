@@ -14,7 +14,6 @@ let options1 = {
     stroke: {
         curve: 'smooth',
     },
-    animate: true,
     dataLabels: {
         enabled: false
     },

@@ -24,6 +24,7 @@ const set_interval = () => {
 const set_num_readings = () => {
     num_readings = document.getElementById("readings_num").value
     console.log(num_readings)
+    redraw_chart(num_readings)
 }
 
 const restart_chart_refresh = (new_int) => {
