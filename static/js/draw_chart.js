@@ -21,18 +21,31 @@ const prepare_data = (data) => {
     let temp = []
     let humid = []
     let TVOC = []
+    let labels = []
 
-    data.map(line => {
+    data.map((line, i) => {
+        labels.push(i + 1)
         categories.push(line.split(" ")[5])
-        CO2.push(line.split(" ")[7])
-        temp.push(line.split(" ")[0])
-        humid.push(line.split(" ")[1])
-        TVOC.push(line.split(" ")[8])
+        CO2.push({
+            x: line.split(" ")[5],
+            y: line.split(" ")[7]
+        })
+        temp.push({
+            x: line.split(" ")[5],
+            y: line.split(" ")[0]
+        })
+        humid.push({
+            x: line.split(" ")[5],
+            y: line.split(" ")[1]
+        })
+        TVOC.push({
+            x: line.split(" ")[5],
+            y: line.split(" ")[8]
+        })
     })
+    console.log("labels", labels)
 
-    // draw_chart(categories, CO2)
-    // console.log(categories)
-    return {categories, CO2, temp, humid, TVOC}
+    return {categories, CO2, temp, humid, TVOC, labels}
 }
 
 const redraw_chart = () => {

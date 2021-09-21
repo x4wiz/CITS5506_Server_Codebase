@@ -114,9 +114,9 @@
 		<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 		<script>
 
-        let base_path = 'https://smart-air-quality.herokuapp.com/api/v1'
+        {#let base_path = 'https://smart-air-quality.herokuapp.com/api/v1'#}
         //remote
-        {#let base_path = 'http://192.168.1.127:5000/api/v1' //local#}
+        let base_path = 'http://192.168.1.127:5000/api/v1' //local
         let live_update_on = false
         let updating, chart_refresh
         let chart1, chart2
@@ -229,6 +229,11 @@
                     stroke: {
                         curve: 'smooth',
                     },
+		                animate: true,
+		                dataLabels: {
+                        enabled: false
+                    },
+		                labels: graph_data.labels,
                     series: [
                         {
                             name: 'CO2',
@@ -236,7 +241,10 @@
                         },
                     ],
                     xaxis: {
-                        categories: graph_data.categories
+                        categories: graph_data.categories,
+		                    labels: {
+                            show: false
+		                    }
                     }
                 }
                 let options2 = {
@@ -262,7 +270,10 @@
 
                     ],
                     xaxis: {
-                        categories: graph_data.categories
+                        categories: graph_data.categories,
+		                    labels: {
+                            show: false
+		                    }
                     }
                 }
                 chart1 = new ApexCharts(document.querySelector("#chart1"),

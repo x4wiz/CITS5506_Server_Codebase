@@ -60,7 +60,7 @@ def get_readings():
 def get_chart_data():
     with open('static/readings.txt', 'r') as file:
         readings = file.readlines()
-    response = jsonify(readings[-50:])
+    response = jsonify(readings[-100:])
     return response
 
 
