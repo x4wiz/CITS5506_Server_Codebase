@@ -118,7 +118,7 @@
         //remote
         {#let base_path = 'http://192.168.1.127:5000/api/v1' //local#}
         let live_update_on = false
-        let updating
+        let updating, chart_refresh
         let chart1, chart2
 
         const set_interval = () => {
@@ -131,7 +131,15 @@
                     interval
                 })
             })
+		        restart_chart_refresh(interval)
             console.log(interval)
+        }
+
+        const restart_chart_refresh = (new_int) => {
+            clearTimeout(chart_refresh)
+		        setInterval(redraw_chart
+                , 1000 * new_int)
+
         }
 
         const get_settings = () => {
@@ -208,6 +216,7 @@
 
             });
         }
+
         window.onload = () => {
             live_data()
             {#draw_chart()#}
@@ -263,7 +272,7 @@
                     options2);
                 chart2.render();
             })
-            setInterval(
+            let chart_refresh = setInterval(
                 redraw_chart
                 , 1000 * 3
             )
