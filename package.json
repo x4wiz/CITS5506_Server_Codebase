@@ -1,11 +1,12 @@
 {
   "dependencies": {
     "@fullhuman/postcss-purgecss": "^4.0.3",
+    "apexcharts": "^3.28.3",
     "cssnano": "^5.0.8",
     "jquery": "^3.6.0",
     "tailwindcss": "^2.2.15"
   },
-   "scripts": {
+  "scripts": {
     "taildev": "tailwindcss build -i ./static/src/main.css -o ./static/dist/main.css"
   }
 }

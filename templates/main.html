@@ -74,7 +74,8 @@
 					<p>CO2 levels raised above 1000 ppm</p>
 					<button class="border-2 p-2 m-2 bg-yellow-100"
 					        onclick="stop_alarm()">Turn off the
-					                                           alert</button>
+					                               alert
+					</button>
 				</div>
 			</div>
 
@@ -83,7 +84,7 @@
 			m-2 hover:bg-gray-50 text-l">Update
 				                           once
 				</button>
-				<button id = "const_upd" onclick="live_data()"
+				<button id="const_upd" onclick="live_data()"
 				        class="border-2 p-2
 			m-2  hover:bg-gray-50 text-l">
 					Constant update
@@ -99,22 +100,26 @@
 					<button onclick="set_interval()" class="border-2 p-2
 			m-2 text-l hover:bg-gray-50">Set interval
 					</button>
-					<button onclick="show_alert()">Show alert</button>
+					<button onclick="get_chart_data()">Chart data</button>
 					<div class="flex flex-row p-2 text-xl">
 						<p class="">Current interval (sec): </p>
 						<p id="cur_interval" class="pl-4">10</p>
 					</div>
 				</div>
 			</div>
+			<div id="chart1"></div>
+			<div id="chart2"></div>
 		</div>
 
-
+		<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 		<script>
+
         let base_path = 'https://smart-air-quality.herokuapp.com/api/v1'
         //remote
-        {#base_path = 'http://192.168.1.127:5000/api/v1' //local#}
+        {#let base_path = 'http://192.168.1.127:5000/api/v1' //local#}
         let live_update_on = false
         let updating
+        let chart1, chart2
 
         const set_interval = () => {
             let interval = document.getElementById("readings_interval").value
@@ -137,10 +142,10 @@
             }).done(data => {
                 console.log(data)
                 document.getElementById("cur_interval").innerText = data
-		                .interval
-		            console.log(!data.stop_alarm && data.alarm)
-		            if (!data.stop_alarm && data.alarm) show_alert()
-		            if (!data.alarm) hide_alert()
+                    .interval
+                console.log(!data.stop_alarm && data.alarm)
+                if (!data.stop_alarm && data.alarm) show_alert()
+                if (!data.alarm) hide_alert()
             })
 
         }
@@ -159,7 +164,7 @@
                 url: `${base_path}/stop_alarm`,
                 type: "POST",
                 contentType: "application/json",
-		            data: JSON.stringify({
+                data: JSON.stringify({
                     alarm: false
                 })
             })
@@ -169,11 +174,11 @@
             if (!live_update_on) {
                 live_update_on = true
                 updating = setInterval(get_data, 1000 * 3)
-		            document.getElementById("const_upd").classList.add("bg-green-100")
+                document.getElementById("const_upd").classList.add("bg-green-100")
             } else {
                 live_update_on = false
-		            clearTimeout(updating)
-		            document.getElementById("const_upd").classList.remove("bg-green-100")
+                clearTimeout(updating)
+                document.getElementById("const_upd").classList.remove("bg-green-100")
             }
 
         }
@@ -189,24 +194,82 @@
                 console.log(data_arr)
                 let date = `${data_arr[4]} ${data_arr[3]} ${data_arr[6]}`
                 document.getElementById("temperature_c").innerText =
-		                data_arr[0] + ' C'
+                    data_arr[0] + ' C'
                 document.getElementById("humidity").innerText = data_arr[1]
-		                + ' %'
+                    + ' %'
                 document.getElementById("reading_date").innerText = date
                 document.getElementById("reading_time").innerText =
                     data_arr[5].toString()
-		            document.getElementById("co2").innerText =
+                document.getElementById("co2").innerText =
                     data_arr[7].toString() + ' ppm'
-		            document.getElementById("tvoc").innerText =
+                document.getElementById("tvoc").innerText =
                     data_arr[8].toString() + ' ppb'
 
 
             });
         }
         window.onload = () => {
+            live_data()
+            {#draw_chart()#}
             setInterval(get_settings, 1000 * 3)
+            get_chart_data().then(() => {
+                let options1 = {
+                    chart: {
+                        type: 'line'
+                    },
+                    stroke: {
+                        curve: 'smooth',
+                    },
+                    series: [
+                        {
+                            name: 'CO2',
+                            data: graph_data.CO2
+                        },
+                    ],
+                    xaxis: {
+                        categories: graph_data.categories
+                    }
+                }
+                let options2 = {
+                    chart: {
+                        type: 'line'
+                    },
+                    stroke: {
+                        curve: 'smooth',
+                    },
+                    series: [
+                        {
+                            name: 'Humidity',
+                            data: graph_data.humid
+                        },
+		                    {
+                            name: 'Temp',
+                            data: graph_data.temp
+                        },
+		                     {
+                            name: 'TVOC',
+                            data: graph_data.TVOC
+                        },
+
+                    ],
+                    xaxis: {
+                        categories: graph_data.categories
+                    }
+                }
+                chart1 = new ApexCharts(document.querySelector("#chart1"),
+                    options1);
+                chart1.render();
+                chart2 = new ApexCharts(document.querySelector("#chart2"),
+                    options2);
+                chart2.render();
+            })
+            setInterval(
+                redraw_chart
+                , 1000 * 3
+            )
         }
 		</script>
 	</div>
 	{#	<script src="{{ url_for('static', filename='js/get_data.js') }}"></script>#}
+	<script src="{{ url_for('static', filename='js/draw_chart.js') }}"></script>
 {% endblock %}
