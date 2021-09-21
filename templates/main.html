@@ -100,7 +100,6 @@
 					<button onclick="set_interval()" class="border-2 p-2
 			m-2 text-l hover:bg-gray-50">Set interval
 					</button>
-					<button onclick="get_chart_data()">Chart data</button>
 					<div class="flex flex-row p-2 text-xl">
 						<p class="">Current interval (sec): </p>
 						<p id="cur_interval" class="pl-4">10</p>
@@ -283,7 +282,7 @@
                     options2);
                 chart2.render();
             })
-            let chart_refresh = setInterval(
+            chart_refresh = setInterval(
                 redraw_chart
                 , 1000 * 3
             )

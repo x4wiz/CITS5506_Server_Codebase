@@ -1,7 +1,3 @@
-// let base_path = 'https://smart-air-quality.herokuapp.com/api/v1'
-//remote
-// let base_path = 'http://192.168.1.127:5000/api/v1' //local
-
 let graph_data
 
 const get_chart_data = async () => {
@@ -43,8 +39,6 @@ const prepare_data = (data) => {
             y: line.split(" ")[8]
         })
     })
-    console.log("labels", labels)
-
     return {categories, CO2, temp, humid, TVOC, labels}
 }
 
