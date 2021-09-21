@@ -2,8 +2,8 @@
 <html>
 	<head>
 		{% block head %}
-			{#    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')#}
-			{#		    }}">#}
+			<link rel="stylesheet" href="{{ url_for('static',
+			    filename='dist/main.css') }}">
 
 			<script
 					src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
@@ -12,9 +12,9 @@
 			<script src="https://code.jquery.com/jquery-3.6.0.min.js"
 			        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
 			        crossorigin="anonymous"></script>
-			{% assets 'main_css' %}
-				<link rel="stylesheet" href="{{ ASSET_URL }}">
-			{% endassets %}
+			{#			{% assets 'main_css' %}#}
+			{#				<link rel="stylesheet" href="{{ ASSET_URL }}">#}
+			{#			{% endassets %}#}
 			<title>{% block title %}{% endblock %} - My Webpage</title>
 		{% endblock %}
 	</head>

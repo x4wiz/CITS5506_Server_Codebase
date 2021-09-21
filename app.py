@@ -1,19 +1,19 @@
 import json
 
 from flask import Flask, request, render_template, jsonify
-from flask_assets import Bundle, Environment
+# from flask_assets import Bundle, Environment
 
 from functions.helpers import analise_co2_over1000
 
 app = Flask(__name__)
 
 # Bundling src/main.css files into dist/main.css'
-css = Bundle('src/main.css', output='dist/main.css',
-             filters='postcss')
-
-assets = Environment(app)
-assets.register('main_css', css)
-css.build()
+# css = Bundle('src/main.css', output='dist/main.css',
+#              filters='postcss')
+#
+# assets = Environment(app)
+# assets.register('main_css', css)
+# css.build()
 
 
 @app.route('/')
