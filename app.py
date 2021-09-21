@@ -58,9 +58,10 @@ def get_readings():
 
 @app.route('/api/v1/get_chart_data', methods=["POST", "GET"])
 def get_chart_data():
+    num_readings = request.get_json()
     with open('static/readings.txt', 'r') as file:
         readings = file.readlines()
-    response = jsonify(readings[-100:])
+    response = jsonify(readings[-1*num_readings:])
     return response
 
 
