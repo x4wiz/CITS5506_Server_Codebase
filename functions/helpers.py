@@ -1,3 +1,5 @@
+import numpy as np
+
 def analise_co2_spike():
     with open('static/readings.txt', 'r') as file:
         readings = file.readlines()
@@ -22,3 +24,14 @@ def analise_co2_over1000():
         print(last_read)
         if last_read > 1000:
             return True
+
+
+def moving_average(readings):
+    data = []
+    for line in readings:
+        data.append(float(line.split(" ")[3][:-2]))
+
+    # print(data)
+    convolved = np.convolve(data, np.ones(10)/10, mode='valid')
+    # print(convolved)
+    return convolved.tolist()

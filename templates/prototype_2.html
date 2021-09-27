@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+	{{ super() }}
+	<script src="{{ url_for('static', filename='js/draw_chart_2.js')
+			}}"></script>
+{% endblock %}
+{% block content %}
+	<div class="px-4 flex flex-row items-stretch justify-center">
+		<div class="m-4 p-6 shadow rounded bg-gray-50 lg:w-1/2 md:w-3/4 sm:w-full">
+
+			<h1 class="text-5xl">Air quality monitor 2</h1>
+
+			<div id="latest_data" class="p-2 border-1 shadow m-2">
+				<table class="p-2 text-xl">
+					<tr>
+						<td>
+							<p>Temperature C: </p>
+						</td>
+						<td class="pl-4">
+							<p id="temperature_c">
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<p>Humidity:</p>
+						</td>
+						<td class="pl-4">
+							<p id="humidity"></p>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<p>Feels like:</p>
+						</td>
+						<td class="pl-4">
+							<p id="heat_factor"></p>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<p>Dust:</p>
+						</td>
+						<td class="pl-4">
+							<p id="dust"></p>
+						</td>
+					</tr>
+{#					<tr>#}
+{#						<td>#}
+{#							<p>Date:</p>#}
+{##}
+{#						</td>#}
+{#						<td class="pl-4">#}
+{#							<p id="reading_date"></p>#}
+{#						</td>#}
+{#					</tr>#}
+{#					<tr>#}
+{#						<td>#}
+{#							<p>Time: </p>#}
+{#						</td>#}
+{#						<td class="pl-4">#}
+{#							<p id="reading_time"></p>#}
+{#						</td>#}
+{#					</tr>#}
+
+				</table>
+				<div class="flex flex-col items-center border-2 p-2 m-2 bg-yellow-300
+				text-center
+				hidden"
+				     id='minor-alert'>
+					<p>CO2 levels raised above 1000 ppm</p>
+					<button class="border-2 p-2 m-2 bg-yellow-100"
+					        onclick="stop_alarm()">Turn off the
+					                               alert
+					</button>
+				</div>
+			</div>
+
+			<div id="controls" class="border-1 shadow m-2 p-2 mt-5">
+				<button type="button" onclick="get_data()" class="border-2 p-2
+			m-2 hover:bg-gray-50 text-l">Update
+				                           once
+				</button>
+				<button id="const_upd" onclick="live_data()"
+				        class="border-2 p-2
+			m-2  hover:bg-gray-50 text-l">
+					Constant update
+				</button>
+				<br>
+				<div>
+					<label for="readings_interval" class="p-2 m-2">Set readings
+					                                               interval in
+					                                               seconds</label><br>
+					<input class="border-2 p-2
+			m-2 hover:bg-gray-50 text-l" type="number" min="3"
+					       id="readings_interval"><br>
+					<button onclick="set_interval()" class="border-2 p-2
+			m-2 text-l hover:bg-gray-50">Set interval
+					</button>
+					<div class="flex flex-row p-2 text-xl">
+						<p class="">Current interval (sec): </p>
+						<p id="cur_interval" class="pl-4">10</p>
+					</div>
+				</div>
+			</div>
+			<div id="chart1"></div>
+			<div id="chart2"></div>
+			<div class="flex flex-row items-center">
+				<input class="border-2 p-2
+			m-2 hover:bg-gray-50 text-l" type="number" min="3"
+				       id="readings_num"><br>
+				<button onclick="set_num_readings()" class="border-2 p-2
+			m-2 text-l hover:bg-gray-50">Show data
+				</button>
+			</div>
+		</div>
+
+		<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+
+	</div>
+	<script src="{{ url_for('static', filename='js/js2.js') }}"></script>
+
+	<script>
+      window.onload = () => {
+          live_data()
+          {#draw_chart()#}
+          setInterval(get_settings, 1000 * 3)
+          get_chart_data(num_readings).then(() => {
+              chart1 = new ApexCharts(document.querySelector("#chart1"),
+                  options1);
+              chart1.render();
+              chart2 = new ApexCharts(document.querySelector("#chart2"),
+                  options2);
+              chart2.render();
+              chart_refresh = setInterval(
+                  redraw_chart
+                  , 1000 * 3
+              )
+          })
+      }
+	</script>
+{% endblock %}

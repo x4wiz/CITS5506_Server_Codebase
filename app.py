@@ -1,11 +1,12 @@
 import json
-
 from flask import Flask, request, render_template, jsonify
+
+from functions.helpers import analise_co2_over1000, moving_average
+
 # from flask_assets import Bundle, Environment
 
-from functions.helpers import analise_co2_over1000
-
 app = Flask(__name__)
+
 
 # Bundling src/main.css files into dist/main.css'
 # css = Bundle('src/main.css', output='dist/main.css',
@@ -16,15 +17,20 @@ app = Flask(__name__)
 # css.build()
 
 
-@app.route('/')
-def hello_world():
-    return render_template('main.html', title='Home')
+@app.route('/p1')
+def prototype_1():
+    return render_template('prototype_1.html', title='Prototype 1')
 
 
-# Move to next lesson call
-@app.route('/api/v1/receive_data', methods=["POST", "GET"])
+@app.route('/p2')
+def prototype_2():
+    return render_template('prototype_2.html', title='Prototype 2')
+
+
+@app.route('/api/v1/receive_data', methods=["POST"])
 def receive_data():
     response = request.get_json()
+    print(response)
     with open('static/readings.txt', 'a') as file:
         file.write("\n")
         file.write(response["data"])
@@ -47,10 +53,30 @@ def receive_data():
     return response
 
 
+@app.route('/api/v1/receive_data_c', methods=["POST"])
+def receive_data_c():
+    response = request.get_json()
+    print(response)
+    with open('static/readings_c.txt', 'a') as file:
+        file.write("\n")
+        file.write(response["data"])
+    return response
+
+
 @app.route('/api/v1/get_readings', methods=["POST", "GET"])
 def get_readings():
     with open('static/readings.txt', 'r') as file:
         readings = file.readlines()
+    response = jsonify(readings[-1])
+
+    return response
+
+
+@app.route('/api/v1/get_readings_2', methods=["POST", "GET"])
+def get_readings_2():
+    with open('static/readings_c.txt', 'r') as file:
+        readings = file.readlines()
+
     response = jsonify(readings[-1])
 
     return response
@@ -61,7 +87,20 @@ def get_chart_data():
     num_readings = request.get_json()
     with open('static/readings.txt', 'r') as file:
         readings = file.readlines()
-    response = jsonify(readings[-1*num_readings:])
+    response = jsonify(readings[-1 * num_readings:])
+    return response
+
+
+@app.route('/api/v1/get_chart_data_2', methods=["POST", "GET"])
+def get_chart_data_2():
+    num_readings = request.get_json()
+    with open('static/readings_c.txt', 'r') as file:
+        readings = file.readlines()
+        n = 50
+        data = moving_average(readings[-n:])
+        print(data)
+
+    response = jsonify(readings[-1 * num_readings:])
     return response
 
 
