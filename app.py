@@ -78,7 +78,7 @@ def get_readings_2():
         readings = file.readlines()
 
     response = jsonify(readings[-1])
-
+    # print(response)
     return response
 
 
@@ -98,7 +98,7 @@ def get_chart_data_2():
         readings = file.readlines()
         n = 50
         data = moving_average(readings[-n:])
-        print(data)
+        # print(data)
 
     response = jsonify(readings[-1 * num_readings:])
     return response
