@@ -1,20 +1,11 @@
+from app import app
 import json
 from flask import Flask, request, render_template, jsonify
+from flask_migrate import Migrate
+from flask_sqlalchemy import SQLAlchemy
 
+from config import Config
 from functions.helpers import analise_co2_over1000, moving_average
-
-# from flask_assets import Bundle, Environment
-
-app = Flask(__name__)
-
-
-# Bundling src/main.css files into dist/main.css'
-# css = Bundle('src/main.css', output='dist/main.css',
-#              filters='postcss')
-#
-# assets = Environment(app)
-# assets.register('main_css', css)
-# css.build()
 
 
 @app.route('/p1')
@@ -146,7 +137,3 @@ def add_headers(response):
     response.headers.add('Access-Control-Allow-Headers',
                          'Content-Type,Authorization')
     return response
-
-
-if __name__ == '__main__':
-    app.run()

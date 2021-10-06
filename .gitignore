@@ -1,5 +1,5 @@
 /node_modules
 /.idea
 .idea
-/static/node_modules
+/app/static/node_modules
 /venv

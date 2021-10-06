@@ -1,0 +1,1 @@
+FLASK_APP=air_quality.py
