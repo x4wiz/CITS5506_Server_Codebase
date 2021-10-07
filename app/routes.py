@@ -71,19 +71,19 @@ def prototype_2():
 def receive_data():
     response = request.get_json()
     print(response)
-    with open('static/readings.txt', 'a') as file:
+    with open('app//static/readings.txt', 'a') as file:
         file.write("\n")
         file.write(response["data"])
 
     if analise_co2_over1000():
-        with open('static/settings.json', 'r+') as file:
+        with open('app/static/settings.json', 'r+') as file:
             data = json.load(file)
             data["alarm"] = True
             file.seek(0)
             json.dump(data, file, indent=4)
             file.truncate()
     else:
-        with open('static/settings.json', 'r+') as file:
+        with open('app/static/settings.json', 'r+') as file:
             data = json.load(file)
             data["alarm"] = False
             data["stop_alarm"] = False
@@ -97,7 +97,7 @@ def receive_data():
 def receive_data_c():
     response = request.get_json()
     print(response)
-    with open('static/readings_c.txt', 'a') as file:
+    with open('app/static/readings_c.txt', 'a') as file:
         file.write("\n")
         file.write(response["data"])
     return response
@@ -105,7 +105,7 @@ def receive_data_c():
 
 @app.route('/api/v1/get_readings', methods=["POST", "GET"])
 def get_readings():
-    with open('static/readings.txt', 'r') as file:
+    with open('app/static/readings.txt', 'r') as file:
         readings = file.readlines()
     response = jsonify(readings[-1])
 
@@ -114,7 +114,7 @@ def get_readings():
 
 @app.route('/api/v1/get_readings_2', methods=["POST", "GET"])
 def get_readings_2():
-    with open('static/readings_c.txt', 'r') as file:
+    with open('app/static/readings_c.txt', 'r') as file:
         readings = file.readlines()
 
     response = jsonify(readings[-1])
@@ -125,7 +125,7 @@ def get_readings_2():
 @app.route('/api/v1/get_chart_data', methods=["POST", "GET"])
 def get_chart_data():
     num_readings = request.get_json()
-    with open('static/readings.txt', 'r') as file:
+    with open('app/static/readings.txt', 'r') as file:
         readings = file.readlines()
     response = jsonify(readings[-1 * num_readings:])
     return response
@@ -134,7 +134,7 @@ def get_chart_data():
 @app.route('/api/v1/get_chart_data_2', methods=["POST", "GET"])
 def get_chart_data_2():
     num_readings = request.get_json()
-    with open('static/readings_c.txt', 'r') as file:
+    with open('app/static/readings_c.txt', 'r') as file:
         readings = file.readlines()
         n = 50
         data = moving_average(readings[-n:])
@@ -146,7 +146,7 @@ def get_chart_data_2():
 
 @app.route('/api/v1/get_settings', methods=["POST", "GET"])
 def get_settings():
-    with open('static/settings.json') as file:
+    with open('app/static/settings.json') as file:
         data = json.load(file)
         response = data
     return response
@@ -156,7 +156,7 @@ def get_settings():
 def set_readings_interval():
     response = request.get_json()
     print(response)
-    with open('static/settings.json', 'r+') as file:
+    with open('app/static/settings.json', 'r+') as file:
         data = json.load(file)
         data["interval"] = int(response["interval"])
         file.seek(0)
@@ -169,7 +169,7 @@ def set_readings_interval():
 def stop_alarm():
     response = request.get_json()
     print(response)
-    with open('static/settings.json', 'r+') as file:
+    with open('app/static/settings.json', 'r+') as file:
         data = json.load(file)
         data["stop_alarm"] = True
         print(data)
