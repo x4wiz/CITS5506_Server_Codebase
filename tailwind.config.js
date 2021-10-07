@@ -2,7 +2,7 @@ module.exports = {
     purge: {
         enabled: true,
         content: [
-            './templates/*.html',
+            'app/templates/*.html',
         ]
     },
     darkMode: false, // or 'media' or 'class'
