@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+	<head>
+		{% block head %}
+			<link rel="stylesheet" href="{{ url_for('static',
+			    filename='dist/main.css') }}">
+			<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+			        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+			        crossorigin="anonymous"></script>
+			<title>{% block title %}{% endblock %} - Smart Air Quality login</title>
+		{% endblock %}
+
+	</head>
+	<body>
+		{% block content %}
+						<div
+								class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+							<div class="max-w-md w-full space-y-8">
+								<div>
+									<img class="mx-auto h-12 w-auto"
+									     src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
+									     alt="Workflow">
+									<h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+										Sign in
+									</h2>
+								</div>
+								{% with messages = get_flashed_messages() %}
+									{% if messages %}
+										<ul>
+											{% for message in messages %}
+												<li>{{ message }}</li>
+											{% endfor %}
+										</ul>
+									{% endif %}
+								{% endwith %}
+								<form class="mt-8 space-y-6" action="" method="post" novalidate>
+									{{ form.hidden_tag() }}
+									<div class="rounded-md shadow-sm -space-y-px">
+										<div>
+
+											{{ form.username(size=32, placeholder="Username" ,
+													class_='appearance-none rounded-none
+								   relative block w-full px-3 py-2 border border-gray-300
+								   placeholder-gray-500 text-gray-900 rounded-t-md
+								  focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm') }}
+										</div>
+										{% for error in form.username.errors %}
+											<span style="color: red;">[{{ error }}]</span>
+										{% endfor %}
+										<div>
+
+											{{ form.password(size=32, placeholder="Password", class_=
+											"appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm") }}
+										</div>
+										{% for error in form.password.errors %}
+											<span style="color: red;">[{{ error }}]</span>
+										{% endfor %}
+									</div>
+
+									<div class="flex items-center justify-between">
+										<div class="flex items-center">
+											{{ form.remember_me(class_= "h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded") }}
+											<label for="remember-me"
+											       class="ml-2 block text-sm text-gray-900">
+												Remember me
+											</label>
+										</div>
+
+									</div>
+
+									<div>
+										{{ form.submit(class_ = "group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" ) }}
+									</div>
+								</form>
+							</div>
+						</div>
+		{% endblock %}
+	</body>
+</html>

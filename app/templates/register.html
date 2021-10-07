@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+	<head>
+		{% block head %}
+			<link rel="stylesheet" href="{{ url_for('static',
+			    filename='dist/main.css') }}">
+			<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+			        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+			        crossorigin="anonymous"></script>
+			<title>{% block title %}{% endblock %} - Smart Air Quality login</title>
+		{% endblock %}
+
+	</head>
+	<body>
+		{% block content %}
+			<div
+					class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+			<div class="max-w-md w-full space-y-8">
+			<h1>Register</h1>
+			<form action="" method="post">
+				{{ form.hidden_tag() }}
+				<p>
+					{{ form.username.label }}<br>
+					{{ form.username(size=32) }}<br>
+					{% for error in form.username.errors %}
+						<span style="color: red;">[{{ error }}]</span>
+					{% endfor %}
+				</p>
+				<p>
+					{{ form.email.label }}<br>
+					{{ form.email(size=64) }}<br>
+					{% for error in form.email.errors %}
+						<span style="color: red;">[{{ error }}]</span>
+					{% endfor %}
+				</p>
+				<p>
+					{{ form.password.label }}<br>
+					{{ form.password(size=32) }}<br>
+					{% for error in form.password.errors %}
+						<span style="color: red;">[{{ error }}]</span>
+					{% endfor %}
+				</p>
+				<p>
+					{{ form.password2.label }}<br>
+					{{ form.password2(size=32) }}<br>
+					{% for error in form.password2.errors %}
+						<span style="color: red;">[{{ error }}]</span>
+					{% endfor %}
+				</p>
+				<p>{{ form.submit() }}</p>
+			</form>
+		{% endblock %}
+		</div>
+		</div>
+	</body>
+</html>

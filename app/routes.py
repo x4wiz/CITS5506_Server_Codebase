@@ -1,19 +1,68 @@
-from app import app
 import json
-from flask import Flask, request, render_template, jsonify
-from flask_migrate import Migrate
-from flask_sqlalchemy import SQLAlchemy
 
-from config import Config
+from flask import request, render_template, jsonify, flash, redirect, url_for
+from flask_login import current_user, login_user, logout_user, login_required
+from werkzeug.urls import url_parse
+
+from app import app
+from app import db
+from app.forms import LoginForm
+from app.forms import RegistrationForm
+from app.models import User
 from functions.helpers import analise_co2_over1000, moving_average
 
 
+@app.route('/', methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('prototype_2'))
+    form = LoginForm()
+
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=form.username.data).first()
+        print(user)
+        print(user.check_password(form.password.data))
+        if user is None or not user.check_password(form.password.data):
+            flash('Invalid username or password')
+            return redirect(url_for('login'))
+        login_user(user, remember=form.remember_me.data)
+        next_page = request.args.get('next')
+        if not next_page or url_parse(next_page).netloc != '':
+            next_page = url_for('prototype_2')
+        return redirect(next_page)
+        # return redirect(url_for('prototype_2'))
+    return render_template('login.html', title='Sign In', form=form)
+
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        user = User(username=form.username.data, email=form.email.data)
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash('Congratulations, you are now a registered user!')
+        return redirect(url_for('login'))
+    return render_template('register.html', title='Register', form=form)
+
+
 @app.route('/p1')
+@login_required
 def prototype_1():
     return render_template('prototype_1.html', title='Prototype 1')
 
 
 @app.route('/p2')
+@login_required
 def prototype_2():
     return render_template('prototype_2.html', title='Prototype 2')
 
