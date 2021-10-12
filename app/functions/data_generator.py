@@ -19,7 +19,7 @@ while True:
     print(data)
     try:
         res = requests.post(
-            f'{base_url}receive_data',
+            f'{base_url}receive_data_c',
             json={'data': data})
     except:
         print("Something went wrong")

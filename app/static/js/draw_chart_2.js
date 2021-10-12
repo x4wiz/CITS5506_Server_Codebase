@@ -1,5 +1,6 @@
 let graph_data = {
     categories: [],
+    co2: [],
     heat: [],
     temp: [],
     humid: [],
@@ -65,6 +66,52 @@ let options2 = {
     }
 }
 
+
+let options3 = {
+    chart: {
+        type: 'line'
+    },
+    stroke: {
+        curve: 'smooth',
+    },
+    annotations: {
+        yaxis: [
+            {
+                y: 1000,
+                borderColor: '#00E396',
+                label: {
+                    borderColor: '#00E396',
+                    style: {
+                        color: '#fff',
+                        background: '#00E396'
+                    },
+                    text: 'Good level of CO2'
+                }
+            }
+        ]
+    },
+    dataLabels: {
+        enabled: false
+    },
+    labels: graph_data.labels,
+    series: [
+        {
+            name: 'CO2',
+            data: graph_data.co2
+        },
+    ],
+    xaxis: {
+        categories: graph_data.categories,
+        labels: {
+            show: false
+        }
+    },
+    yaxis: {
+        min: 380,
+        max: 2000
+    }
+}
+
 const get_chart_data = async (num_readings) => {
     await fetch(`${base_path}/get_chart_data_2`, {
         method: 'POST',
@@ -75,6 +122,7 @@ const get_chart_data = async (num_readings) => {
     })
         .then(res => res.json())
         .then(res => {
+            console.log(res)
             graph_data = prepare_data(res)
         })
 }
@@ -82,6 +130,7 @@ const get_chart_data = async (num_readings) => {
 const prepare_data = (data) => {
     let categories = []
     let temp = []
+    let co2 = []
     let humid = []
     let heat = []
     let dust = []
@@ -93,6 +142,10 @@ const prepare_data = (data) => {
         heat.push({
             x: i+1,
             y: line.split(" ")[2]
+        })
+        co2.push({
+            x: i+1,
+            y: line.split(" ")[4]
         })
         temp.push({
             x: i+1,
@@ -107,7 +160,7 @@ const prepare_data = (data) => {
             y: line.split(" ")[3]
         })
     })
-    return {categories, heat, temp, humid, dust, labels}
+    return {categories, co2, heat, temp, humid, dust, labels}
 }
 
 const redraw_chart = () => {
@@ -126,6 +179,11 @@ const redraw_chart = () => {
             },
             {
                 data: graph_data.heat
+            }
+        ])
+        chart3.updateSeries([
+            {
+                data: graph_data.co2
             }
         ])
     })

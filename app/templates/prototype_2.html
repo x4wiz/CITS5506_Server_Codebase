@@ -103,8 +103,12 @@
 					</div>
 				</div>
 			</div>
-			<div id="chart1"></div>
-			<div id="chart2"></div>
+			<h2 class="p-2 mt-10 text-4xl">Dust</h2>
+			<div class="p-2 border-1 shadow m-2" id="chart1"></div>
+			<h2 class="p-2 mt-10 text-4xl">Temperature, humidity, heat</h2>
+			<div class="p-2 border-1 shadow m-2" id="chart2"></div>
+			<h2 class="p-2 mt-10 text-4xl">CO2 levels</h2>
+			<div class="p-2 border-1 shadow m-2" id="chart3"></div>
 			<div class="flex flex-row items-center">
 				<input class="border-2 p-2
 			m-2 hover:bg-gray-50 text-l" type="number" min="3"
@@ -133,6 +137,9 @@
               chart2 = new ApexCharts(document.querySelector("#chart2"),
                   options2);
               chart2.render();
+              chart3 = new ApexCharts(document.querySelector("#chart3"),
+                  options3);
+              chart3.render();
               chart_refresh = setInterval(
                   redraw_chart
                   , 1000 * 3
