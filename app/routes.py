@@ -212,7 +212,7 @@ def receive_data_c():
     with open('app/static/readings_c.txt', 'a') as file:
         file.write("\n")
         file.write(response["data"])
-    return response
+    return "Thank you for your data, Shane, I get it on my local machine!"
 
 
 @app.route('/api/v1/get_chart_data_2', methods=["POST", "GET"])
@@ -220,9 +220,9 @@ def get_chart_data_2():
     num_readings = request.get_json()
     with open('app/static/readings_c.txt', 'r') as file:
         readings = file.readlines()
-        n = 50
-        data = moving_average(readings[-n:])
-        # print(data)
+        # n = 50
+        # data = moving_average(readings[-n:])
+        # # print(data)
 
     response = jsonify(readings[-1 * num_readings:])
     return response
