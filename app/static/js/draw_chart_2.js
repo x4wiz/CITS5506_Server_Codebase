@@ -122,7 +122,6 @@ const get_chart_data = async (num_readings) => {
     })
         .then(res => res.json())
         .then(res => {
-            console.log(res)
             graph_data = prepare_data(res)
         })
 }
