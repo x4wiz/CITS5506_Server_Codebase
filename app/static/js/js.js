@@ -74,11 +74,11 @@ const live_data = () => {
     if (!live_update_on) {
         live_update_on = true
         updating = setInterval(get_data, 1000 * 3)
-        document.getElementById("const_upd").classList.add("bg-green-100")
+        // document.getElementById("const_upd").classList.add("bg-green-100")
     } else {
         live_update_on = false
         clearTimeout(updating)
-        document.getElementById("const_upd").classList.remove("bg-green-100")
+        // document.getElementById("const_upd").classList.remove("bg-green-100")
     }
 
 }
@@ -89,22 +89,19 @@ const get_data = async () => {
         type: "GET",
         contentType: "application/json",
     }).done(data => {
-
-        let data_arr = data.split(" ")
-        console.log(data_arr)
-        let date = `${data_arr[4]} ${data_arr[3]} ${data_arr[6]}`
         document.getElementById("temperature_c").innerText =
-            data_arr[0] + ' C'
-        document.getElementById("humidity").innerText = data_arr[1]
+            data.temp + ' C'
+        document.getElementById("humidity").innerText = data.humid
             + ' %'
-        document.getElementById("reading_date").innerText = date
-        document.getElementById("reading_time").innerText =
-            data_arr[5].toString()
+        document.getElementById("heat_factor").innerText =
+            data.heat + ' C'
+        document.getElementById("dust").innerText = data.dust + ' mM'
         document.getElementById("co2").innerText =
-            data_arr[7].toString() + ' ppm'
+            data.co2 + ' ppm'
         document.getElementById("tvoc").innerText =
-            data_arr[8].toString() + ' ppb'
-
+            data.tvoc + ' ppb'
+        document.getElementById("reading_date").innerText = data.timestamp.split(" ")[0]
+        document.getElementById("reading_time").innerText = data.timestamp.split(" ")[1].split(".")[0]
 
     });
 }

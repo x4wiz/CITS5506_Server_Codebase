@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -24,3 +26,18 @@ class User(UserMixin, db.Model):
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
+
+
+class Data(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    temp = db.Column(db.Float)
+    humid = db.Column(db.Float)
+    heat = db.Column(db.Float)
+    dust = db.Column(db.Float)
+    co2 = db.Column(db.Integer)
+    tvoc = db.Column(db.Integer)
+
+    def as_dict(self):
+        return {c.name: str(getattr(self, c.name)) for c in
+                self.__table__.columns}

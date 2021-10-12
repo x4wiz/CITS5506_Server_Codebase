@@ -35,6 +35,22 @@
 					</tr>
 					<tr>
 						<td>
+							<p>Feels like:</p>
+						</td>
+						<td class="pl-4">
+							<p id="heat_factor"></p>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<p>Dust:</p>
+						</td>
+						<td class="pl-4">
+							<p id="dust"></p>
+						</td>
+					</tr>
+					<tr>
+						<td>
 							<p>CO2:</p>
 						</td>
 						<td class="pl-4">
@@ -81,16 +97,16 @@
 			</div>
 
 			<div id="controls" class="border-1 shadow m-2 p-2 mt-5">
-				<button type="button" onclick="get_data()" class="border-2 p-2
-			m-2 hover:bg-gray-50 text-l">Update
-				                           once
-				</button>
-				<button id="const_upd" onclick="live_data()"
-				        class="border-2 p-2
-			m-2  hover:bg-gray-50 text-l">
-					Constant update
-				</button>
-				<br>
+{#				<button type="button" onclick="get_data()" class="border-2 p-2#}
+{#			m-2 hover:bg-gray-50 text-l">Update#}
+{#				                           once#}
+{#				</button>#}
+{#				<button id="const_upd" onclick="live_data()"#}
+{#				        class="border-2 p-2#}
+{#			m-2  hover:bg-gray-50 text-l">#}
+{#					Constant update#}
+{#				</button>#}
+{#				<br>#}
 				<div>
 					<label for="readings_interval" class="p-2 m-2">Set readings
 					                                               interval in
@@ -107,8 +123,12 @@
 					</div>
 				</div>
 			</div>
-			<div id="chart1"></div>
-			<div id="chart2"></div>
+			<h2 class="p-2 mt-10 text-4xl">CO2 levels</h2>
+			<div class="p-2 border-1 shadow m-2" id="chart1"></div>
+			<h2 class="p-2 mt-10 text-4xl">Temperature, humidity and tVOC</h2>
+			<div class="p-2 border-1 shadow m-2" id="chart2"></div>
+			<h2 class="p-2 mt-10 text-4xl">Dust levels</h2>
+			<div class="p-2 border-1 shadow m-2" id="chart3"></div>
 			<div class="flex flex-row items-center">
 				<input class="border-2 p-2
 			m-2 hover:bg-gray-50 text-l" type="number" min="3"
@@ -137,6 +157,9 @@
               chart2 = new ApexCharts(document.querySelector("#chart2"),
                   options2);
               chart2.render();
+              chart3 = new ApexCharts(document.querySelector("#chart3"),
+                  options3);
+              chart3.render();
               chart_refresh = setInterval(
                   redraw_chart
                   , 1000 * 3
