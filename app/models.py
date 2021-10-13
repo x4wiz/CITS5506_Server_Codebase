@@ -13,7 +13,7 @@ def load_user(id):
 
 
 class User(UserMixin, db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, db.Identity(start=1, cycle=True), primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
@@ -29,8 +29,8 @@ class User(UserMixin, db.Model):
 
 
 class Data(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    id = db.Column(db.Integer, db.Identity(start=1, cycle=True), primary_key=True)
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.now())
     temp = db.Column(db.Float)
     humid = db.Column(db.Float)
     heat = db.Column(db.Float)

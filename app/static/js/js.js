@@ -1,7 +1,7 @@
-let base_path = 'https://smart-air-quality.herokuapp.com/api/v1'
+// let base_path = 'https://smart-air-quality.herokuapp.com/api/v1'
 //remote
 
-// let base_path = 'http://192.168.1.127:5000/api/v1' //local
+let base_path = 'http://192.168.1.127:5000/api/v1' //local
 let live_update_on = false
 let updating, chart_refresh
 let chart1, chart2

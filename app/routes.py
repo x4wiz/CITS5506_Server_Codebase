@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 
 from flask import request, render_template, jsonify, flash, redirect, \
     url_for
@@ -82,9 +83,9 @@ def receive_data():
 
     response = request.get_json()
     print(response)
-    with open('app/static/readings.txt', 'a') as file:
-        file.write("\n")
-        file.write(response["data"])
+    # with open('app/static/readings.txt', 'a') as file:
+    #     file.write("\n")
+    #     file.write(response["data"])
 
     temp = float(response["data"].split(" ")[0])
     humid = float(response["data"].split(" ")[1])
@@ -92,9 +93,10 @@ def receive_data():
     dust = float(response["data"].split(" ")[3])
     co2 = int(response["data"].split(" ")[4])
     tvoc = int(response["data"].split(" ")[5])
+    timestamp = datetime.utcnow
 
-    data = Data(temp=temp, humid=humid, heat=heat, dust=dust, co2=co2,
-                tvoc=tvoc)
+    data = Data(temp=temp, humid=humid, heat=heat,
+                dust=dust, co2=co2, tvoc=tvoc)
     db.session.add(data)
     db.session.commit()
 
