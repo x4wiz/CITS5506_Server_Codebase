@@ -1,7 +1,8 @@
-let base_path = 'https://smart-air-quality.herokuapp.com/api/v1'
+// let base_path = 'https://smart-air-quality.herokuapp.com/api/v1'
 //remote
 
 // let base_path = 'http://192.168.1.127:5000/api/v1' //local
+let base_path = 'http://127.0.0.1:5000/api/v1' //local
 let live_update_on = false
 let updating, chart_refresh
 let chart1, chart2
@@ -89,19 +90,18 @@ const get_data = async () => {
         type: "GET",
         contentType: "application/json",
     }).done(data => {
-        document.getElementById("temperature_c").innerText =
-            data.temp + ' C'
-        document.getElementById("humidity").innerText = data.humid
-            + ' %'
-        document.getElementById("heat_factor").innerText =
-            data.heat + ' C'
-        document.getElementById("dust").innerText = data.dust + ' mM'
-        document.getElementById("co2").innerText =
-            data.co2 + ' ppm'
-        document.getElementById("tvoc").innerText =
-            data.tvoc + ' ppb'
-        document.getElementById("reading_date").innerText = data.timestamp.split(" ")[0]
-        document.getElementById("reading_time").innerText = data.timestamp.split(" ")[1].split(".")[0]
+        document.getElementById("temperature_c").innerHTML =
+            data.temp
+        document.getElementById("humidity").innerHTML = data.humid
+        // document.getElementById("heat_factor").innerHTML =
+        //     data.heat
+        document.getElementById("dust").innerHTML = data.dust
+        document.getElementById("co2").innerHTML =
+            data.co2
+        document.getElementById("tvoc").innerHTML =
+            data.tvoc
+        // document.getElementById("reading_date").innerHTML = data.timestamp.split(" ")[0]
+        document.getElementById("reading_time").innerHTML = data.timestamp.split(" ")[1].split(".")[0]
 
     });
 }

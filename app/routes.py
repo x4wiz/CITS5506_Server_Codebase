@@ -93,9 +93,10 @@ def receive_data():
     dust = float(response["data"].split(" ")[3])
     co2 = int(response["data"].split(" ")[4])
     tvoc = int(response["data"].split(" ")[5])
-    timestamp = datetime.utcnow
+    timestamp = datetime.now()
+    print(timestamp)
 
-    data = Data(temp=temp, humid=humid, heat=heat,
+    data = Data(timestamp=timestamp, temp=temp, humid=humid, heat=heat,
                 dust=dust, co2=co2, tvoc=tvoc)
     db.session.add(data)
     db.session.commit()
@@ -123,6 +124,7 @@ def receive_data():
 @app.route('/api/v1/get_readings', methods=["POST", "GET"])
 def get_readings():
     response = Data.query.order_by(Data.id.desc()).first().as_dict()
+    print(response)
     return response
 
 
@@ -186,6 +188,7 @@ def stop_alarm():
     with open('app/static/settings.json', 'r+') as file:
         data = json.load(file)
         data["stop_alarm"] = True
+        data["alarm"] = False
         print(data)
         file.seek(0)
         json.dump(data, file, indent=4)

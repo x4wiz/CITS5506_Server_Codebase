@@ -1,16 +1,15 @@
 {
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.4",
     "@fullhuman/postcss-purgecss": "^4.0.3",
+    "@tailwindcss/forms": "^0.3.4",
     "apexcharts": "^3.28.3",
     "cssnano": "^5.0.8",
     "jquery": "^3.6.0",
-    "tailwindcss": "^2.2.15",
-    "@tailwindcss/forms": "^0.3.4"
+    "numpy": "^0.0.1",
+    "tailwindcss": "^2.2.15"
   },
   "scripts": {
     "taildev": "tailwindcss build -i app/static/src/main.css -o app/static/dist/main.css"
-  },
-  "devDependencies": {
-    "@tailwindcss/forms": "^0.3.4"
   }
 }

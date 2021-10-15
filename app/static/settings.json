@@ -1,6 +1,6 @@
 {
     "alarm": false,
-    "interval": 15,
+    "interval": 10,
     "readings_on": true,
     "stop_alarm": false
 }
