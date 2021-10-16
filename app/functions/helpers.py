@@ -17,13 +17,12 @@ def analise_co2_spike():
     return False
 
 
-def analise_co2_over1000():
-    with open('app/static/readings.txt', 'r') as file:
-        readings = file.readlines()
-        last_read = int(readings[-1].split(" ")[4])
-        print(last_read)
-        if last_read > 1000:
-            return True
+def analise_co2_over1000(co2):
+
+    if co2 > 1000:
+        return True
+    else:
+        return False
 
 
 def moving_average(readings):

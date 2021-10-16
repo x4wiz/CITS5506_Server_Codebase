@@ -102,7 +102,7 @@ def receive_data():
     db.session.commit()
 
     # turning alarm on and off
-    if analise_co2_over1000():
+    if analise_co2_over1000(co2):
         with open('app/static/settings.json', 'r+') as file:
             data = json.load(file)
             data["alarm"] = True
