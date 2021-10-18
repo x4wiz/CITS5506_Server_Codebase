@@ -124,9 +124,11 @@ def receive_data():
 def get_readings():
     response = Data.query.order_by(Data.id.desc()).first().as_dict()
     print(response)
-    timestamp = datetime.utcnow()
-    local_time = timestamp.replace(tzinfo=timezone.utc).astimezone(tz=None)
-    print(local_time)
+    db_datetime = response["timestamp"].split(".")[0]
+    d = datetime.strptime(db_datetime, "%Y-%m-%d %H:%M:%S")
+    d = d.replace(tzinfo=timezone.utc)
+    d = d.astimezone()
+    response["timestamp"] = d.strftime("%Y-%m-%d %H:%M:%S")
     return response
 
 
@@ -154,8 +156,18 @@ def get_chart_data():
     dust = [r.dust for r in data][::-1]
     co2 = [r.co2 for r in data][::-1]
     tvoc = [r.tvoc for r in data][::-1]
+
+    # serializing timestamp and bringing time from UCF to local
+    timestamps = [r.timestamp for r in data][::-1]
+    fixed_timestamps = []
+    for timestamp in timestamps:
+        d = timestamp.replace(tzinfo=timezone.utc)
+        d = d.astimezone()
+        # fixed_timestamps.append(d.strftime("%Y-%m-%d %H:%M:%S"))
+        fixed_timestamps.append(d.strftime("%H:%M:%S"))
+
     response = {'temp': temp, 'humid': humid, 'heat': heat, 'dust': dust,
-                'co2': co2, 'tvoc': tvoc}
+                'co2': co2, 'tvoc': tvoc, 'timestamps': fixed_timestamps}
     response = jsonify(response)
     return response
 

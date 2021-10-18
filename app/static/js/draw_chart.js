@@ -1,11 +1,12 @@
 let graph_data = {
-    categories: [],
+    categories: ['sd','sd','sd','sd','sd','sd','sd','sd','sd','sd','sd','sd',],
     co2: [],
     temp: [],
     humid: [],
     tvoc: [],
     labels: [],
-    dust: []
+    dust: [],
+    timestamps: []
 }
 
 // Options for CO2 chart
@@ -35,7 +36,7 @@ let options1 = {
     dataLabels: {
         enabled: false
     },
-    labels: graph_data.labels,
+    labels: graph_data.timestamps,
     series: [
         {
             name: 'CO2',
@@ -43,7 +44,7 @@ let options1 = {
         },
     ],
     xaxis: {
-        categories: graph_data.categories,
+        categories: graph_data.timestamps,
         labels: {
             show: false
         }
@@ -127,7 +128,7 @@ let options3 = {
         },
     ],
     xaxis: {
-        categories: graph_data.categories,
+        categories: graph_data.timestamps,
         labels: {
             show: false
         }
@@ -148,12 +149,21 @@ const get_chart_data = async (num_readings) => {
     })
         .then(res => res.json())
         .then(data => {
-            graph_data.co2 = data.co2
-            graph_data.humid = data.humid
-            graph_data.temp = data.temp
-            graph_data.tvoc = data.tvoc
-            graph_data.dust = data.dust
+            graph_data.co2 = prepare_data(data.co2, data.timestamps)
+            graph_data.humid = prepare_data(data.humid, data.timestamps)
+            graph_data.temp = prepare_data(data.temp, data.timestamps)
+            graph_data.tvoc = prepare_data(data.tvoc, data.timestamps)
+            graph_data.dust = prepare_data(data.dust, data.timestamps)
+            graph_data.timestamps = data.timestamps
         })
+}
+
+const prepare_data = (values, timestamps) => {
+    let new_data = []
+    for (let i = 0; i < values.length; i++) {
+        new_data.push({x: timestamps[i], y: values[i]})
+    }
+    return new_data
 }
 
 const redraw_chart = () => {
