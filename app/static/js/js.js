@@ -68,9 +68,12 @@ const get_settings = () => {
             .dust_threshold
         console.log(!data.stop_alarm && data.alarm)
         if (!data.stop_alarm && data.alarm) show_alert()
-        if (!data.alarm) hide_alert()
+        if (!data.stop_alarm && (data.co2_color === "red" || data.dust_color === "red")) show_alert()
+        // if (!data.alarm) hide_alert()
+        if (data.co2_color !== "red" && data.dust_color !== "red") hide_alert()
+        toggle_element_color(data.co2_color, "co2")
+        toggle_element_color(data.dust_color, "dust")
     })
-
 }
 
 const show_alert = () => {
@@ -79,6 +82,28 @@ const show_alert = () => {
 
 const hide_alert = () => {
     document.getElementById("minor-alert").classList.add("hidden")
+}
+
+const toggle_element_color = (value, name) => {
+    let element = document.getElementById(name).classList
+    if (value === "red") {
+        element.remove("text-green-400")
+        element.add("text-red-400")
+    } else {
+        element.remove("text-red-400")
+        element.add("text-green-400")
+    }
+}
+
+const toggle_dust_color = (value) => {
+    let element = document.getElementById("co2").classList
+    if (value === "red") {
+        element.remove("text-green-400")
+        element.add("text-red-400")
+    } else {
+        element.remove("text-red-400")
+        element.add("text-green-400")
+    }
 }
 
 const stop_alarm = () => {
@@ -124,6 +149,5 @@ const get_data = async () => {
             data.tvoc
         // document.getElementById("reading_date").innerHTML = data.timestamp.split(" ")[0]
         document.getElementById("reading_time").innerHTML = data.timestamp.split(" ")[1].split(".")[0]
-
     });
 }

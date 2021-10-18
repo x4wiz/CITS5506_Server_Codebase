@@ -2,7 +2,9 @@
     "alarm": false,
     "interval": 10,
     "readings_on": true,
-    "stop_alarm": true,
+    "stop_alarm": false,
     "co2_threshold": 1000,
-    "dust_threshold": "0.15"
+    "dust_threshold": "0.15",
+    "co2_color": "green",
+    "dust_color": "green"
 }

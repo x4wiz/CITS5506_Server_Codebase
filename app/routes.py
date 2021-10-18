@@ -92,9 +92,6 @@ def receive_data():
     dust = float(response["data"].split(" ")[3])
     co2 = int(response["data"].split(" ")[4])
     tvoc = int(response["data"].split(" ")[5])
-    # timestamp = datetime.utcnow()
-    # local_time = timestamp.replace(tzinfo=timezone.utc).astimezone(tz=None)
-    # print("Local time on receiving: ", local_time)
 
     data = Data(temp=temp, humid=humid, heat=heat,
                 dust=dust, co2=co2, tvoc=tvoc)
@@ -103,10 +100,11 @@ def receive_data():
 
     # turning alarm on and off
     print("Dust?: ", dust, check_dust_threshold(dust))
-    if check_co2_threshold(co2) or check_dust_threshold(dust):
+    if check_co2_threshold(co2):
         with open('app/static/settings.json', 'r+') as file:
             data = json.load(file)
             data["alarm"] = True
+            data["co2_color"] = 'red'
             file.seek(0)
             json.dump(data, file, indent=4)
             file.truncate()
@@ -115,9 +113,29 @@ def receive_data():
             data = json.load(file)
             data["alarm"] = False
             data["stop_alarm"] = False
+            data["co2_color"] = 'green'
             file.seek(0)
             json.dump(data, file, indent=4)
             file.truncate()
+
+    if check_dust_threshold(dust):
+        with open('app/static/settings.json', 'r+') as file:
+            data = json.load(file)
+            data["alarm"] = True
+            data["dust_color"] = 'red'
+            file.seek(0)
+            json.dump(data, file, indent=4)
+            file.truncate()
+    else:
+        with open('app/static/settings.json', 'r+') as file:
+            data = json.load(file)
+            data["alarm"] = False
+            data["stop_alarm"] = False
+            data["dust_color"] = 'green'
+            file.seek(0)
+            json.dump(data, file, indent=4)
+            file.truncate()
+
     return response
 
 

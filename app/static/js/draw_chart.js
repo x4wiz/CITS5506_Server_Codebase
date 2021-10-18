@@ -155,7 +155,7 @@ const get_chart_data = async (num_readings) => {
             graph_data.tvoc = prepare_data(data.tvoc, data.timestamps)
             graph_data.dust = prepare_data(data.dust, data.timestamps)
             graph_data.timestamps = data.timestamps
-            console.log(graph_data.timestamps)
+            // console.log(graph_data.timestamps)
         })
 }
 
