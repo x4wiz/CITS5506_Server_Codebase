@@ -12,7 +12,7 @@ from app import db
 from app.forms import LoginForm
 from app.forms import RegistrationForm
 from app.functions.api_header import authorize_request
-from app.functions.helpers import analise_co2_over1000, moving_average
+from app.functions.helpers import check_co2_threshold, check_dust_threshold, moving_average
 from app.models import User, Data
 
 
@@ -92,9 +92,9 @@ def receive_data():
     dust = float(response["data"].split(" ")[3])
     co2 = int(response["data"].split(" ")[4])
     tvoc = int(response["data"].split(" ")[5])
-    timestamp = datetime.utcnow()
-    local_time = timestamp.replace(tzinfo=timezone.utc).astimezone(tz=None)
-    print("Local time on receiving: ", local_time)
+    # timestamp = datetime.utcnow()
+    # local_time = timestamp.replace(tzinfo=timezone.utc).astimezone(tz=None)
+    # print("Local time on receiving: ", local_time)
 
     data = Data(temp=temp, humid=humid, heat=heat,
                 dust=dust, co2=co2, tvoc=tvoc)
@@ -102,7 +102,7 @@ def receive_data():
     db.session.commit()
 
     # turning alarm on and off
-    if analise_co2_over1000(co2):
+    if check_co2_threshold(co2) or check_dust_threshold(dust):
         with open('app/static/settings.json', 'r+') as file:
             data = json.load(file)
             data["alarm"] = True
@@ -120,7 +120,7 @@ def receive_data():
     return response
 
 
-# --- send last readings to website --- #
+# --- send latest readings to website --- #
 @app.route('/api/v1/get_readings', methods=["POST", "GET"])
 def get_readings():
     response = Data.query.order_by(Data.id.desc()).first().as_dict()
@@ -138,19 +138,8 @@ def get_readings():
 @app.route('/api/v1/get_chart_data', methods=["POST", "GET"])
 def get_chart_data():
     num_readings = request.get_json()
-    # with open('app/static/readings.txt', 'r') as file:
-    #     readings = file.readlines()
-    # response = jsonify(readings[-1 * num_readings:])
 
-    # readings2 = Data.query.order_by(Data.id.desc()).limit(10).all()
-    # print(readings2)
-    # data = []
-    # for line in readings2:
-    #     data.append(line.as_dict())
-    # print(data)
-
-    # co2 = Data.query.with_entities(Data.co2).limit(10).execute()
-
+    # serializing data from db
     data = Data.query.order_by(Data.id.desc()).limit(num_readings)
     temp = [r.temp for r in data][::-1]
     humid = [r.humid for r in data][::-1]
@@ -161,13 +150,17 @@ def get_chart_data():
 
     # serializing timestamp and bringing time from UCF to local
     timestamps = [r.timestamp for r in data][::-1]
+    print(timestamps)
     fixed_timestamps = []
+    west = pytz.timezone('Australia/West')
     for timestamp in timestamps:
         d = timestamp.replace(tzinfo=timezone.utc)
-        d = d.astimezone()
+        d = d.astimezone(west)
         # fixed_timestamps.append(d.strftime("%Y-%m-%d %H:%M:%S"))
         fixed_timestamps.append(d.strftime("%H:%M:%S"))
+    print(fixed_timestamps[0])
 
+    # preparing response
     response = {'temp': temp, 'humid': humid, 'heat': heat, 'dust': dust,
                 'co2': co2, 'tvoc': tvoc, 'timestamps': fixed_timestamps}
     response = jsonify(response)
@@ -214,6 +207,7 @@ def set_threshold():
     return response
 
 
+# --- stop alarm on the device --- #
 @app.route('/api/v1/stop_alarm', methods=["POST", "GET"])
 def stop_alarm():
     response = request.get_json()

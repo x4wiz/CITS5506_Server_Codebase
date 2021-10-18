@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def analise_co2_spike():
     with open('static/readings.txt', 'r') as file:
         readings = file.readlines()
@@ -17,12 +18,22 @@ def analise_co2_spike():
     return False
 
 
-def analise_co2_over1000(co2):
+def check_co2_threshold(co2):
+    with open('app/static/settings.json', 'r+') as file:
+        data = json.load(file)
+        if co2 > int(data["co2_threshold"]):
+            return True
+        else:
+            return False
 
-    if co2 > 1000:
-        return True
-    else:
-        return False
+
+def check_dust_threshold(dust):
+    with open('app/static/settings.json', 'r+') as file:
+        data = json.load(file)
+        if dust > float(data["co2_threshold"]):
+            return True
+        else:
+            return False
 
 
 def moving_average(readings):
@@ -31,6 +42,6 @@ def moving_average(readings):
         data.append(float(line.split(" ")[3][:-2]))
 
     # print(data)
-    convolved = np.convolve(data, np.ones(10)/10, mode='valid')
+    convolved = np.convolve(data, np.ones(10) / 10, mode='valid')
     # print(convolved)
     return convolved.tolist()
