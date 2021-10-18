@@ -1,8 +1,8 @@
 {
-    "alarm": false,
+    "alarm": true,
     "interval": 10,
     "readings_on": true,
     "stop_alarm": true,
-    "co2_threshold": 1200,
+    "co2_threshold": 1000,
     "dust_threshold": "0.15"
 }

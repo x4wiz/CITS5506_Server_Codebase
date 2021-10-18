@@ -1,4 +1,5 @@
 import numpy as np
+import json
 
 
 def analise_co2_spike():

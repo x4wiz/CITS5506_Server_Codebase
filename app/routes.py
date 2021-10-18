@@ -150,7 +150,6 @@ def get_chart_data():
 
     # serializing timestamp and bringing time from UCF to local
     timestamps = [r.timestamp for r in data][::-1]
-    print(timestamps)
     fixed_timestamps = []
     west = pytz.timezone('Australia/West')
     for timestamp in timestamps:
@@ -158,7 +157,6 @@ def get_chart_data():
         d = d.astimezone(west)
         # fixed_timestamps.append(d.strftime("%Y-%m-%d %H:%M:%S"))
         fixed_timestamps.append(d.strftime("%H:%M:%S"))
-    print(fixed_timestamps[0])
 
     # preparing response
     response = {'temp': temp, 'humid': humid, 'heat': heat, 'dust': dust,
