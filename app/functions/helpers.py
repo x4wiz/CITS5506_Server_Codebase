@@ -31,7 +31,7 @@ def check_co2_threshold(co2):
 def check_dust_threshold(dust):
     with open('app/static/settings.json', 'r+') as file:
         data = json.load(file)
-        if dust > float(data["co2_threshold"]):
+        if float(dust) > float(data["dust_threshold"]):
             return True
         else:
             return False

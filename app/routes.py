@@ -102,6 +102,7 @@ def receive_data():
     db.session.commit()
 
     # turning alarm on and off
+    print("Dust?: ", dust, check_dust_threshold(dust))
     if check_co2_threshold(co2) or check_dust_threshold(dust):
         with open('app/static/settings.json', 'r+') as file:
             data = json.load(file)
