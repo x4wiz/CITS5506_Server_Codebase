@@ -1,5 +1,6 @@
 import json
 from datetime import datetime, timezone
+import pytz
 from flask import request, render_template, jsonify, flash, redirect, \
     url_for
 from flask_login import current_user, login_user, logout_user, login_required, \
@@ -127,7 +128,8 @@ def get_readings():
     db_datetime = response["timestamp"].split(".")[0]
     d = datetime.strptime(db_datetime, "%Y-%m-%d %H:%M:%S")
     d = d.replace(tzinfo=timezone.utc)
-    d = d.astimezone()
+    west = pytz.timezone('Australia/West')
+    d = d.astimezone(west)
     response["timestamp"] = d.strftime("%Y-%m-%d %H:%M:%S")
     return response
 
