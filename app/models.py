@@ -30,7 +30,7 @@ class User(UserMixin, db.Model):
 
 class Data(db.Model):
     id = db.Column(db.Integer, db.Identity(start=1, cycle=True), primary_key=True)
-    timestamp = db.Column(db.DateTime, index=True)
+    timestamp = db.Column(db.DateTime, default=datetime.now)
     temp = db.Column(db.Float)
     humid = db.Column(db.Float)
     heat = db.Column(db.Float)

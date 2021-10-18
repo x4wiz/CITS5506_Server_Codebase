@@ -1,6 +1,5 @@
 import json
-from datetime import datetime
-
+from datetime import datetime, timezone
 from flask import request, render_template, jsonify, flash, redirect, \
     url_for
 from flask_login import current_user, login_user, logout_user, login_required, \
@@ -11,8 +10,8 @@ from app import app
 from app import db
 from app.forms import LoginForm
 from app.forms import RegistrationForm
-from app.functions.helpers import analise_co2_over1000, moving_average
 from app.functions.api_header import authorize_request
+from app.functions.helpers import analise_co2_over1000, moving_average
 from app.models import User, Data
 
 
@@ -80,7 +79,6 @@ def prototype_2():
 # --- receive data from device --- #
 @app.route('/api/v1/receive_data', methods=["POST"])
 def receive_data():
-
     response = request.get_json()
     print(response)
     # with open('app/static/readings.txt', 'a') as file:
@@ -93,10 +91,11 @@ def receive_data():
     dust = float(response["data"].split(" ")[3])
     co2 = int(response["data"].split(" ")[4])
     tvoc = int(response["data"].split(" ")[5])
-    timestamp = datetime.now()
-    print(timestamp)
+    timestamp = datetime.utcnow()
+    local_time = timestamp.replace(tzinfo=timezone.utc).astimezone(tz=None)
+    print("Local time on receiving: ", local_time)
 
-    data = Data(timestamp=timestamp, temp=temp, humid=humid, heat=heat,
+    data = Data(temp=temp, humid=humid, heat=heat,
                 dust=dust, co2=co2, tvoc=tvoc)
     db.session.add(data)
     db.session.commit()
@@ -125,6 +124,9 @@ def receive_data():
 def get_readings():
     response = Data.query.order_by(Data.id.desc()).first().as_dict()
     print(response)
+    timestamp = datetime.utcnow()
+    local_time = timestamp.replace(tzinfo=timezone.utc).astimezone(tz=None)
+    print(local_time)
     return response
 
 
@@ -175,6 +177,23 @@ def set_readings_interval():
     with open('app/static/settings.json', 'r+') as file:
         data = json.load(file)
         data["interval"] = int(response["interval"])
+        file.seek(0)
+        json.dump(data, file, indent=4)
+        file.truncate()
+    return response
+
+
+# --- set CO2 and dust thresholds ---- #
+@app.route('/api/v1/set_threshold', methods=["POST", "GET"])
+def set_threshold():
+    response = request.get_json()
+    print(response)
+    with open('app/static/settings.json', 'r+') as file:
+        data = json.load(file)
+        if response["sensor"] == "co2":
+            data["co2_threshold"] = int(response["threshold"])
+        else:
+            data["dust_threshold"] = response["threshold"]
         file.seek(0)
         json.dump(data, file, indent=4)
         file.truncate()

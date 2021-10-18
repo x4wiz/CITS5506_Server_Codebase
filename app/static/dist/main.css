@@ -884,6 +884,15 @@ select {
   border-bottom-width: calc(1px * var(--tw-divide-y-reverse));
 }
 
+.divide-black > :not([hidden]) ~ :not([hidden]) {
+  --tw-divide-opacity: 1;
+  border-color: rgba(0, 0, 0, var(--tw-divide-opacity));
+}
+
+.divide-opacity-25 > :not([hidden]) ~ :not([hidden]) {
+  --tw-divide-opacity: 0.25;
+}
+
 .self-center {
   align-self: center;
 }

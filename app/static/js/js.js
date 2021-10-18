@@ -8,6 +8,10 @@ let updating, chart_refresh
 let chart1, chart2
 let num_readings = 100
 
+//-----------------------------------//
+// ----- Settings functions ---------//
+//-----------------------------------//
+
 const set_interval = () => {
     let interval = document.getElementById("readings_interval").value
     $.ajax({
@@ -20,6 +24,20 @@ const set_interval = () => {
     })
     restart_chart_refresh(interval)
     console.log(interval)
+}
+
+const set_threshold = (sensor) => {
+    let co2 = document.getElementById("new_co2_threshold").value
+    let dust = document.getElementById("new_dust_threshold").value
+    $.ajax({
+        url: `${base_path}/set_threshold`,
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({
+            threshold: sensor === 'co2' ? co2 : dust,
+            sensor: sensor
+        })
+    })
 }
 
 const set_num_readings = () => {
@@ -44,6 +62,10 @@ const get_settings = () => {
         console.log(data)
         document.getElementById("cur_interval").innerText = data
             .interval
+        document.getElementById("cur_co2_threshold").innerText = data
+            .co2_threshold
+        document.getElementById("cur_dust_threshold").innerText = data
+            .dust_threshold
         console.log(!data.stop_alarm && data.alarm)
         if (!data.stop_alarm && data.alarm) show_alert()
         if (!data.alarm) hide_alert()

@@ -8,6 +8,7 @@ let graph_data = {
     dust: []
 }
 
+// Options for CO2 chart
 let options1 = {
     chart: {
         type: 'line'
@@ -52,6 +53,8 @@ let options1 = {
         max: 2000
     }
 }
+
+// Options for the temp / humid / tVOC chart
 let options2 = {
     chart: {
         type: 'line'
@@ -82,9 +85,14 @@ let options2 = {
         labels: {
             show: false
         }
+    },
+    yaxis: {
+        min: 0,
+        max: 150
     }
 }
 
+// Options for the dust chart
 let options3 = {
     chart: {
         type: 'line'
