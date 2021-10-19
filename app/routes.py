@@ -84,18 +84,12 @@ def receive_data():
     print(response)
     device_sn = response["data"].split(" ")[6]
     device_id = Device.query.filter_by(serial_num=device_sn).first().id
-    # with open('app/static/readings.txt', 'a') as file:
-    #     file.write("\n")
-    #     file.write(response["data"])
-
     temp = float(response["data"].split(" ")[0])
     humid = float(response["data"].split(" ")[1])
     heat = float(response["data"].split(" ")[2])
     dust = float(response["data"].split(" ")[3])
     co2 = int(response["data"].split(" ")[4])
     tvoc = int(response["data"].split(" ")[5])
-
-
 
     data = Data(temp=temp, humid=humid, heat=heat,
                 dust=dust, co2=co2, tvoc=tvoc, device_id=device_id)
@@ -145,7 +139,8 @@ def receive_data():
 # --- send latest readings to website --- #
 @app.route('/api/v1/get_readings', methods=["POST", "GET"])
 def get_readings():
-    response = Data.query.order_by(Data.id.desc()).first().as_dict()
+    req = request.get_json()
+    response = Data.query.filter_by(device_id=req["device"]).order_by(Data.id.desc()).first().as_dict()
     print(response)
     db_datetime = response["timestamp"].split(".")[0]
     d = datetime.strptime(db_datetime, "%Y-%m-%d %H:%M:%S")
@@ -159,10 +154,13 @@ def get_readings():
 # --- send data for charts --- #
 @app.route('/api/v1/get_chart_data', methods=["POST", "GET"])
 def get_chart_data():
-    num_readings = request.get_json()
+
+    req = request.get_json()
+    num_readings = req["num_readings"]
+    device_id = req["device_id"]
 
     # serializing data from db
-    data = Data.query.order_by(Data.id.desc()).limit(num_readings)
+    data = Data.query.filter_by(device_id=device_id).order_by(Data.id.desc()).limit(num_readings)
     temp = [r.temp for r in data][::-1]
     humid = [r.humid for r in data][::-1]
     heat = [r.heat for r in data][::-1]

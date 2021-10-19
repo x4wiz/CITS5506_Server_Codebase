@@ -145,7 +145,12 @@ const get_chart_data = async (num_readings) => {
         headers: {
             'Content-Type': 'application/json'
         },
-        body: num_readings
+        body: JSON.stringify({
+            num_readings: num_readings,
+            device_id: 1
+        })
+
+
     })
         .then(res => res.json())
         .then(data => {

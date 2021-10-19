@@ -1,7 +1,7 @@
-let base_path = 'https://smart-air-quality.herokuapp.com/api/v1'
+// let base_path = 'https://smart-air-quality.herokuapp.com/api/v1'
 //remote
 
-// let base_path = 'http://192.168.1.127:5000/api/v1' //local
+let base_path = 'http://192.168.1.127:5000/api/v1' //local
 // let base_path = 'http://127.0.0.1:5000/api/v1' //local
 let live_update_on = false
 let updating, chart_refresh
@@ -134,7 +134,10 @@ const live_data = () => {
 const get_data = async () => {
     $.ajax({
         url: `${base_path}/get_readings`,
-        type: "GET",
+        type: "POST",
+        data: JSON.stringify({
+            device: 1
+        }),
         contentType: "application/json",
     }).done(data => {
         document.getElementById("temperature_c").innerHTML =
