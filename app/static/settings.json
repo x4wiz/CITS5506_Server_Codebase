@@ -5,6 +5,6 @@
     "stop_alarm": false,
     "co2_threshold": 1000,
     "dust_threshold": "0.15",
-    "co2_color": "green",
+    "co2_color": "red",
     "dust_color": "green"
 }

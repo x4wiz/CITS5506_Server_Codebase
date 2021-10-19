@@ -3,6 +3,7 @@ module.exports = {
         enabled: true,
         content: [
             'app/templates/*.html',
+            'app/static/js/*.js'
         ]
     },
     darkMode: false, // or 'media' or 'class'
