@@ -100,42 +100,50 @@ def receive_data():
     # turning alarm on and off for the first device
     if device_id == 2:
         return response
-    if check_co2_threshold(co2):
-        with open('app/static/settings.json', 'r+') as file:
-            data = json.load(file)
-            data["alarm"] = True
-            data["co2_color"] = 'red'
-            file.seek(0)
-            json.dump(data, file, indent=4)
-            file.truncate()
     else:
-        with open('app/static/settings.json', 'r+') as file:
-            data = json.load(file)
-            data["alarm"] = False
-            data["stop_alarm"] = False
-            data["co2_color"] = 'green'
-            file.seek(0)
-            json.dump(data, file, indent=4)
-            file.truncate()
+        if check_co2_threshold(co2):
+            print("ALARM ON!")
+            with open('app/static/settings.json', 'r+') as file:
+                data = json.load(file)
+                data["alarm"] = True
+                data["co2_color"] = 'red'
+                file.seek(0)
+                json.dump(data, file, indent=4)
+                file.truncate()
+        else:
+            with open('app/static/settings.json', 'r+') as file:
+                data = json.load(file)
+                if data["dust_color"] == "green":
+                    data["alarm"] = False
+                    data["stop_alarm"] = False
+                    data["co2_color"] = 'green'
+                else:
+                    data["co2_color"] = 'green'
+                file.seek(0)
+                json.dump(data, file, indent=4)
+                file.truncate()
 
-    if check_dust_threshold(dust):
-        with open('app/static/settings.json', 'r+') as file:
-            data = json.load(file)
-            data["alarm"] = True
-            data["dust_color"] = 'red'
-            file.seek(0)
-            json.dump(data, file, indent=4)
-            file.truncate()
-    else:
-        with open('app/static/settings.json', 'r+') as file:
-            data = json.load(file)
-            data["alarm"] = False
-            data["stop_alarm"] = False
-            data["dust_color"] = 'green'
-            file.seek(0)
-            json.dump(data, file, indent=4)
-            file.truncate()
-    return response
+        if check_dust_threshold(dust):
+            with open('app/static/settings.json', 'r+') as file:
+                data = json.load(file)
+                data["alarm"] = True
+                data["dust_color"] = 'red'
+                file.seek(0)
+                json.dump(data, file, indent=4)
+                file.truncate()
+        else:
+            with open('app/static/settings.json', 'r+') as file:
+                data = json.load(file)
+                if data["co2_color"] == "green":
+                    data["alarm"] = False
+                    data["stop_alarm"] = False
+                    data["dust_color"] = 'green'
+                else:
+                    data["dust_color"] = 'green'
+                file.seek(0)
+                json.dump(data, file, indent=4)
+                file.truncate()
+        return response
 
 
 # --- send latest readings to website --- #

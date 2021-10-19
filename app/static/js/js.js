@@ -1,7 +1,7 @@
-let base_path = 'https://smart-air-quality.herokuapp.com/api/v1'
+// let base_path = 'https://smart-air-quality.herokuapp.com/api/v1'
 //remote
 
-// let base_path = 'http://192.168.1.127:5000/api/v1' //local
+let base_path = 'http://192.168.1.127:5000/api/v1' //local
 // let base_path = 'http://127.0.0.1:5000/api/v1' //local
 let live_update_on = false
 let updating, chart_refresh
@@ -152,7 +152,6 @@ const get_data = async () => {
             data.co2
         document.getElementById("tvoc").innerHTML =
             data.tvoc
-        // document.getElementById("reading_date").innerHTML = data.timestamp.split(" ")[0]
         document.getElementById("reading_time").innerHTML = data.timestamp.split(" ")[1].split(".")[0]
     });
 }
