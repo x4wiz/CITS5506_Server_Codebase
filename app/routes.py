@@ -13,7 +13,7 @@ from app.forms import LoginForm
 from app.forms import RegistrationForm
 from app.functions.api_header import authorize_request
 from app.functions.helpers import check_co2_threshold, check_dust_threshold, moving_average
-from app.models import User, Data
+from app.models import User, Data, Device
 
 
 # LOGIN PAGE
@@ -82,6 +82,8 @@ def prototype_2():
 def receive_data():
     response = request.get_json()
     print(response)
+    device_sn = response["data"].split(" ")[6]
+    device_id = Device.query.filter_by(serial_num=device_sn).first().id
     # with open('app/static/readings.txt', 'a') as file:
     #     file.write("\n")
     #     file.write(response["data"])
@@ -93,13 +95,14 @@ def receive_data():
     co2 = int(response["data"].split(" ")[4])
     tvoc = int(response["data"].split(" ")[5])
 
+
+
     data = Data(temp=temp, humid=humid, heat=heat,
-                dust=dust, co2=co2, tvoc=tvoc)
+                dust=dust, co2=co2, tvoc=tvoc, device_id=device_id)
     db.session.add(data)
     db.session.commit()
 
     # turning alarm on and off
-    print("Dust?: ", dust, check_dust_threshold(dust))
     if check_co2_threshold(co2):
         with open('app/static/settings.json', 'r+') as file:
             data = json.load(file)
