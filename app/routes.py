@@ -97,7 +97,9 @@ def receive_data():
     db.session.add(data)
     db.session.commit()
 
-    # turning alarm on and off
+    # turning alarm on and off for the first device
+    if device_id == 2:
+        return response
     if check_co2_threshold(co2):
         with open('app/static/settings.json', 'r+') as file:
             data = json.load(file)
@@ -133,7 +135,6 @@ def receive_data():
             file.seek(0)
             json.dump(data, file, indent=4)
             file.truncate()
-
     return response
 
 
