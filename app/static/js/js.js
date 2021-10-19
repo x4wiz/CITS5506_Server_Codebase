@@ -7,6 +7,7 @@ let live_update_on = false
 let updating, chart_refresh
 let chart1, chart2
 let num_readings = 100
+const device_id = window.appConfig.device_id
 
 //-----------------------------------//
 // ----- Settings functions ---------//
@@ -73,6 +74,7 @@ const get_settings = () => {
         if (data.co2_color !== "red" && data.dust_color !== "red") hide_alert()
         toggle_element_color(data.co2_color, "co2")
         toggle_element_color(data.dust_color, "dust")
+        console.log("device_id: " + device_id)
     })
 }
 
@@ -136,7 +138,7 @@ const get_data = async () => {
         url: `${base_path}/get_readings`,
         type: "POST",
         data: JSON.stringify({
-            device: 1
+            device: device_id
         }),
         contentType: "application/json",
     }).done(data => {

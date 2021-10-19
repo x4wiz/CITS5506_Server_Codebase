@@ -9,7 +9,11 @@
 	</style>
 	<link rel='stylesheet' href="{{ url_for('static',
 	filename='src/fontawesome.min.css') }}">
-
+	<script type="text/javascript">
+	window.appConfig = {
+      device_id: {{ device_id }},
+    }
+	</script>
 	<script src="{{ url_for('static', filename='js/draw_chart.js') }}"></script>
 {% endblock %}
 {% block content %}
@@ -20,6 +24,7 @@
 				<div class="text-4xl flex-auto text-center m-2">Air quality
 				                                                inside
 				</div>
+				<p>A physical device prototype</p>
 				<div class="flex-auto text-center m-2">
 					<span class="text-gray-300">Last updated:</span>
 					<span id="reading_time" class="text-gray-300">10:45</span>
@@ -177,7 +182,7 @@
 	</div>
 	<script src="{{ url_for('static', filename='js/js.js') }}"></script>
 
-	<script>
+	<script type="text/javascript">
       window.onload = () => {
           live_data()
           {#draw_chart()#}

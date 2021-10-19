@@ -1,3 +1,4 @@
+// const device_id = window.appConfig.device_id
 let graph_data = {
     categories: ['sd','sd','sd','sd','sd','sd','sd','sd','sd','sd','sd','sd',],
     co2: [],
@@ -147,7 +148,7 @@ const get_chart_data = async (num_readings) => {
         },
         body: JSON.stringify({
             num_readings: num_readings,
-            device_id: 1
+            device_id: device_id
         })
 
 

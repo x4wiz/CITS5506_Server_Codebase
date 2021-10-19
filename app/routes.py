@@ -64,13 +64,13 @@ def register():
 @app.route('/p1')
 @login_required
 def prototype_1():
-    return render_template('prototype_1.html', title='Prototype 1')
+    return render_template('prototype_1.html', title='Prototype 1', device_id=1)
 
 
 @app.route('/p2')
 @login_required
 def prototype_2():
-    return render_template('prototype_2.html', title='Prototype 2')
+    return render_template('prototype_2.html', title='Prototype 2', device_id=2)
 
 
 # ----------------------------------#
@@ -84,6 +84,7 @@ def receive_data():
     print(response)
     device_sn = response["data"].split(" ")[6]
     device_id = Device.query.filter_by(serial_num=device_sn).first().id
+    print(device_id)
     temp = float(response["data"].split(" ")[0])
     humid = float(response["data"].split(" ")[1])
     heat = float(response["data"].split(" ")[2])

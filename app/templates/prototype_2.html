@@ -2,113 +2,94 @@
 {% block title %}Index{% endblock %}
 {% block head %}
 	{{ super() }}
-	<script src="{{ url_for('static', filename='js/draw_chart_2.js')
-			}}"></script>
+	<style type="text/css">
+      .important {
+          color: #336699;
+      }
+	</style>
+	<link rel='stylesheet' href="{{ url_for('static',
+	filename='src/fontawesome.min.css') }}">
+	<script type="text/javascript">
+	window.appConfig = {
+      device_id: {{ device_id }},
+    }
+	</script>
+	<script src="{{ url_for('static', filename='js/draw_chart.js') }}"></script>
 {% endblock %}
 {% block content %}
 	<div class="px-4 flex flex-row items-stretch justify-center">
 		<div class="m-4 p-6 shadow rounded bg-gray-50 lg:w-1/2 md:w-3/4 sm:w-full">
 
-			<h1 class="text-5xl">Air quality monitor 2</h1>
-
-			<div id="latest_data" class="p-2 border-1 shadow m-2">
-				<table class="p-2 text-xl">
-					<tr>
-						<td>
-							<p>Temperature C: </p>
-						</td>
-						<td class="pl-4">
-							<p id="temperature_c">
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<p>Humidity:</p>
-						</td>
-						<td class="pl-4">
-							<p id="humidity"></p>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<p>Feels like:</p>
-						</td>
-						<td class="pl-4">
-							<p id="heat_factor"></p>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<p>Dust:</p>
-						</td>
-						<td class="pl-4">
-							<p id="dust"></p>
-						</td>
-					</tr>
-{#					<tr>#}
-{#						<td>#}
-{#							<p>Date:</p>#}
-{##}
-{#						</td>#}
-{#						<td class="pl-4">#}
-{#							<p id="reading_date"></p>#}
-{#						</td>#}
-{#					</tr>#}
-{#					<tr>#}
-{#						<td>#}
-{#							<p>Time: </p>#}
-{#						</td>#}
-{#						<td class="pl-4">#}
-{#							<p id="reading_time"></p>#}
-{#						</td>#}
-{#					</tr>#}
-
-				</table>
-				<div class="flex flex-col items-center border-2 p-2 m-2 bg-yellow-300
-				text-center
-				hidden"
-				     id='minor-alert'>
-					<p>CO2 levels raised above 1000 ppm</p>
-					<button class="border-2 p-2 m-2 bg-yellow-100"
-					        onclick="stop_alarm()">Turn off the
-					                               alert
-					</button>
+			<div class="flex flex-col justify-center mb-2">
+				<div class="text-4xl flex-auto text-center m-2">Air quality
+				                                                inside
+				</div>
+				<p>A virtual device with randomly generated data</p>
+				<div class="flex-auto text-center m-2">
+					<span class="text-gray-300">Last updated:</span>
+					<span id="reading_time" class="text-gray-300">10:45</span>
 				</div>
 			</div>
-
-			<div id="controls" class="border-1 shadow m-2 p-2 mt-5">
-				<button type="button" onclick="get_data()" class="border-2 p-2
-			m-2 hover:bg-gray-50 text-l">Update
-				                           once
-				</button>
-				<button id="const_upd" onclick="live_data()"
-				        class="border-2 p-2
-			m-2  hover:bg-gray-50 text-l">
-					Constant update
-				</button>
-				<br>
-				<div>
-					<label for="readings_interval" class="p-2 m-2">Set readings
-					                                               interval in
-					                                               seconds</label><br>
-					<input class="border-2 p-2
-			m-2 hover:bg-gray-50 text-l" type="number" min="3"
-					       id="readings_interval"><br>
-					<button onclick="set_interval()" class="border-2 p-2
-			m-2 text-l hover:bg-gray-50">Set interval
-					</button>
-					<div class="flex flex-row p-2 text-xl">
-						<p class="">Current interval (sec): </p>
-						<p id="cur_interval" class="pl-4">10</p>
+			<div id="latest_data" class="p-2 border-1 rounded-lg shadow m-2">
+				<div class="flex flex-col divide-y">
+					<div class="flex justify-evenly divide-x">
+						<div class="flex flex-row p-3 self-center">
+							<div id="temperature_c" class="font-mono text-7xl">25</div>
+							<div class="mt-3 ml-2 text-lg">C</div>
+						</div>
+						<div class="flex flex-row p-3 self-center">
+							<div id="humidity" class="font-mono text-7xl">56</div>
+							<div class="mt-3 ml-2 text-lg">%</div>
+						</div>
+					</div>
+					<div class="flex justify-evenly divide-x">
+						<div class="flex flex-row p-3 self-center">
+							<div id="dust" class="font-mono text-7xl text-green-400">0
+							                                                         .11
+							</div>
+							<div class="mt-3 ml-2 text-lg">mM</div>
+						</div>
+						<div class="flex flex-row p-3 self-center">
+							<div id="tvoc" class="font-mono text-7xl text-green-400">16</div>
+							<div class="mt-3 ml-2 text-lg">tVOC</div>
+						</div>
+					</div>
+					<div class="flex justify-around divide-x">
+						<div class="flex flex-row p-3 self-center">
+							<div id="co2" class="font-mono text-7xl
+							text-green-400">Loading...
+							</div>
+							<div class="mt-3 ml-2 text-lg">ppm</div>
+						</div>
 					</div>
 				</div>
+				{##}
+				{#					<div><i class="fas fa-temperature-low"></i>#}
+				{#					</div>#}
+
 			</div>
-			<h2 class="p-2 mt-10 text-4xl">Dust</h2>
-			<div class="p-2 border-1 shadow m-2" id="chart1"></div>
-			<h2 class="p-2 mt-10 text-4xl">Temperature, humidity, heat</h2>
-			<div class="p-2 border-1 shadow m-2" id="chart2"></div>
+
+			<div class="flex flex-col items-center border-2 p-2 m-2 bg-yellow-300
+				text-center
+				hidden"
+			     id='minor-alert'>
+				<p>One of the readings went above the desired level!</p>
+				<button class="border-2 p-2 m-2 bg-yellow-100"
+				        onclick="stop_alarm()">Turn off the
+				                               alert
+				</button>
+			</div>
+
+			{#    Charts    #}
 			<h2 class="p-2 mt-10 text-4xl">CO2 levels</h2>
-			<div class="p-2 border-1 shadow m-2" id="chart3"></div>
+			<div class="p-2 border-1 shadow rounded-lg m-2" id="chart1"></div>
+
+			<h2 class="p-2 mt-10 text-4xl">Temperature, humidity and tVOC</h2>
+			<div class="p-2 border-1 shadow rounded-lg m-2" id="chart2"></div>
+
+			<h2 class="p-2 mt-10 text-4xl">Dust levels</h2>
+			<div class="p-2 border-1 shadow rounded-lg m-2" id="chart3"></div>
+
 			<div class="flex flex-row items-center">
 				<input class="border-2 p-2
 			m-2 hover:bg-gray-50 text-l" type="number" min="3"
@@ -117,15 +98,91 @@
 			m-2 text-l hover:bg-gray-50">Show data
 				</button>
 			</div>
+
+			<div class="accordion border-1 shadow m-2 p-2 mt-5" id="settings_block">
+				<div class="accordion-item">
+					<h2 class="accordion-header" id="settings_header">
+						<button class="accordion-button" type="button"
+						        data-bs-toggle="collapse" data-bs-target="#settings_body"
+						        aria-expanded="false" aria-controls="settings_body">
+							Show settings
+						</button>
+					</h2>
+					<div id="settings_body" class="accordion-collapse collapse show"
+					     aria-labelledby="settings_header"
+					     data-bs-parent="#settings_bloc">
+						<div class="accordion-body">
+							<div class="flex flex-col divide-y divide-black divide-opacity-25">
+
+								{#		SET READING INTERVAL	#}
+								<div>
+									<label for="readings_interval" class="m-2">Set readings
+									                                           interval in
+									                                           seconds</label>
+									<div class="flex flex-row">
+										<input class="border-2 p-2 m-2 hover:bg-gray-50 text-l" type="number" min="3"
+										       id="readings_interval"><br>
+										<button onclick="set_interval()" class="border-2 p-2 m-2 text-l hover:bg-gray-50">Set interval
+										</button>
+
+									</div>
+									<div class="flex flex-row p-2 text-xl">
+										<p>Current interval (sec): </p>
+										<p id="cur_interval" class="pl-4">10</p>
+									</div>
+								</div>
+
+								{#		SET CO2 max level	#}
+								<div>
+									<label for="readings_interval" class="m-2">Set CO2 alarm
+								                                           threshold</label>
+									<div class="flex flex-row">
+										<input class="border-2 p-2 m-2 hover:bg-gray-50 text-l" type="number" min="500"
+										       id="new_co2_threshold"><br>
+										<button onclick="set_threshold('co2')" class="border-2 p-2 m-2 text-l hover:bg-gray-50">Set
+										                                                                                        threshold
+										</button>
+									</div>
+									<div class="flex flex-row p-2 text-xl">
+										<p>Current threshold (ppm): </p>
+										<p id="cur_co2_threshold" class="pl-4">10</p>
+									</div>
+								</div>
+
+								{#		SET dust max level	#}
+								<div>
+									<label for="readings_interval" class="m-2">Set dust alarm
+								                                           threshold</label>
+									<div class="flex flex-row">
+										<input class="border-2 p-2 m-2 hover:bg-gray-50 text-l"
+										       type="number" min="500"
+										       id="new_dust_threshold"><br>
+										<button onclick="set_threshold('dust')" class="border-2 p-2 m-2 text-l hover:bg-gray-50">Set
+										                                                                                         threshold
+										</button>
+									</div>
+									<div class="flex flex-row p-2 text-xl">
+										<p>Current threshold (mM): </p>
+										<p id="cur_dust_threshold" class="pl-4">10</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
 		</div>
+
 
 		<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
 
 	</div>
-	<script src="{{ url_for('static', filename='js/js2.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/js.js') }}"></script>
 
-	<script>
+	<script type="text/javascript">
       window.onload = () => {
           live_data()
           {#draw_chart()#}
