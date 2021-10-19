@@ -70,11 +70,10 @@ const get_settings = () => {
         console.log(!data.stop_alarm && data.alarm)
         if (!data.stop_alarm && data.alarm) show_alert()
         if (!data.stop_alarm && (data.co2_color === "red" || data.dust_color === "red")) show_alert()
-        // if (!data.alarm) hide_alert()
+        if (!data.alarm) hide_alert()
         if (data.co2_color !== "red" && data.dust_color !== "red") hide_alert()
         toggle_element_color(data.co2_color, "co2")
         toggle_element_color(data.dust_color, "dust")
-        console.log("device_id: " + device_id)
     })
 }
 
@@ -88,17 +87,6 @@ const hide_alert = () => {
 
 const toggle_element_color = (value, name) => {
     let element = document.getElementById(name).classList
-    if (value === "red") {
-        element.remove("text-green-400")
-        element.add("text-red-400")
-    } else {
-        element.remove("text-red-400")
-        element.add("text-green-400")
-    }
-}
-
-const toggle_dust_color = (value) => {
-    let element = document.getElementById("co2").classList
     if (value === "red") {
         element.remove("text-green-400")
         element.add("text-red-400")
