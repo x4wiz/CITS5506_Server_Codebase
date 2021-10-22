@@ -4,3 +4,6 @@
 /app/static/node_modules
 /venv
 .env
+__pycache__/
+.flaskenv
+app/__pycache__/*
