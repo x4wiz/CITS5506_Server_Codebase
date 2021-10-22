@@ -1,11 +1,8 @@
+import requests
 from random import randint
 from time import sleep
 
-import requests
-
-# base_url = 'http://192.168.1.127:5000/api/v1/'
 base_url = 'http://127.0.0.1:5000/api/v1/'
-# base_url = 'https://smart-air-quality.herokuapp.com/api/v1/'
 
 while True:
     temp = str(randint(23, 24))
@@ -14,7 +11,7 @@ while True:
     dust = str(randint(9, 12) / 100)
     co2 = str(randint(500, 550))
     tvoc = str(randint(5, 15))
-    device_id = '24ac4f6a4c-2'
+    device_id = '24ac4f6a4c'
 
     data = temp + " " + humid + " " + heat + " " + dust + " " + co2 + " " + \
            tvoc + " " + device_id
@@ -26,4 +23,4 @@ while True:
     except:
         print("Something went wrong")
 
-    sleep(2)
+    sleep(3)
