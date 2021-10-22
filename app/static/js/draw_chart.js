@@ -1,4 +1,6 @@
-// const device_id = window.appConfig.device_id
+// This is charts options and functions for pulling the charts data and update the charts
+
+// Initially graph data is empty
 let graph_data = {
     categories: ['sd','sd','sd','sd','sd','sd','sd','sd','sd','sd','sd','sd',],
     co2: [],
@@ -140,6 +142,7 @@ let options3 = {
     }
 }
 
+// Getting data for charts, last num_readings
 const get_chart_data = async (num_readings) => {
     await fetch(`${base_path}/get_chart_data`, {
         method: 'POST',
@@ -150,21 +153,21 @@ const get_chart_data = async (num_readings) => {
             num_readings: num_readings,
             device_id: device_id
         })
-
-
     })
         .then(res => res.json())
         .then(data => {
+            // the data should be restructured to be supplied to Apexcharts library for updating the charts
+            // Restructuring the data and saving it to the graph_data object
             graph_data.co2 = prepare_data(data.co2, data.timestamps)
             graph_data.humid = prepare_data(data.humid, data.timestamps)
             graph_data.temp = prepare_data(data.temp, data.timestamps)
             graph_data.tvoc = prepare_data(data.tvoc, data.timestamps)
             graph_data.dust = prepare_data(data.dust, data.timestamps)
             graph_data.timestamps = data.timestamps
-            // console.log(graph_data.timestamps)
         })
 }
 
+// Structuring data into an array of objects
 const prepare_data = (values, timestamps) => {
     let new_data = []
     for (let i = 0; i < values.length; i++) {
@@ -173,6 +176,8 @@ const prepare_data = (values, timestamps) => {
     return new_data
 }
 
+// Redrawing the charts. First, receive data from the backend and the feed it to the updateSeries function of the
+// charts instances
 const redraw_chart = () => {
     get_chart_data(num_readings).then(() => {
         chart1.updateSeries([
@@ -199,7 +204,3 @@ const redraw_chart = () => {
     })
 
 }
-
-
-
-

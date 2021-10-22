@@ -18,11 +18,12 @@
 			<script src="https://code.jquery.com/jquery-3.6.0.min.js"
 			        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
 			        crossorigin="anonymous"></script>
-			<title>{% block title %}{% endblock %} - My Webpage</title>
+			<title>{% block title %}{% endblock %} - Smart Air Monitor</title>
 		{% endblock %}
 
 	</head>
 	<body>
+		{#	NAVBAR #}
 		{% block navbar %}
 			<nav class="bg-gray-800">
 				<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -53,16 +54,6 @@
 									>
 										Device 2</a>
 									<a href="{{ url_for('logout') }}">Logout</a>
-									{#								{% endif %}#}
-									{##}
-									{#							<a href="#"#}
-									{#							   class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Projects</a>#}
-									{##}
-									{#							<a href="#"#}
-									{#							   class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Calendar</a>#}
-									{##}
-									{#							<a href="#"#}
-									{#							   class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Reports</a>#}
 								</div>
 							</div>
 						</div>
@@ -81,6 +72,7 @@
 
 			<main>
 				<div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+					{#	Main page content goes here		#}
 					{% block content %}
 					{% endblock %}
 				</div>

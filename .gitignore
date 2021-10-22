@@ -3,3 +3,5 @@
 .idea
 /app/static/node_modules
 /venv
+.env
+app.db

@@ -7,8 +7,6 @@
           color: #336699;
       }
 	</style>
-	<link rel='stylesheet' href="{{ url_for('static',
-	filename='src/fontawesome.min.css') }}">
 	<script type="text/javascript">
 	window.appConfig = {
       device_id: {{ device_id }},
@@ -63,10 +61,6 @@
 						</div>
 					</div>
 				</div>
-				{##}
-				{#					<div><i class="fas fa-temperature-low"></i>#}
-				{#					</div>#}
-
 			</div>
 
 			<div class="flex flex-col items-center border-2 p-2 m-2 bg-yellow-300
@@ -148,7 +142,6 @@
 										<p id="cur_co2_threshold" class="pl-4">10</p>
 									</div>
 								</div>
-
 								{#		SET dust max level	#}
 								<div>
 									<label for="readings_interval" class="m-2">Set dust alarm
@@ -171,22 +164,20 @@
 					</div>
 				</div>
 			</div>
-
-
 		</div>
-
-
 		<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
 
 	</div>
+	{#	Include main js file #}
 	<script src="{{ url_for('static', filename='js/js.js') }}"></script>
 
 	<script type="text/javascript">
+			{#	Starting on window load		#}
       window.onload = () => {
-          live_data()
-          {#draw_chart()#}
-          setInterval(get_settings, 1000 * 3)
+          live_data() {# Live updates of the data #}
+          setInterval(get_settings, 1000 * 3) {# Getting new settings every 3 seconds #}
+          {# Creating instances for charts and draw initial charts with empty data #}
           get_chart_data(num_readings).then(() => {
               chart1 = new ApexCharts(document.querySelector("#chart1"),
                   options1);
@@ -197,6 +188,7 @@
               chart3 = new ApexCharts(document.querySelector("#chart3"),
                   options3);
               chart3.render();
+              {#  Refresh chart data every 3 seconds #}
               chart_refresh = setInterval(
                   redraw_chart
                   , 1000 * 3
