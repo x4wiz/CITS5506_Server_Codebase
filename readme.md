@@ -37,8 +37,8 @@ Same command but you might need to install curl package from here https://curl.s
 You will see the new data displayed on the webpage. An alert should pop up as the CO2 reading is above 1000
 
 ### Online Site
-1. Alternatively, navigate to the [herokuapp website]("https://smart-air-quality.herokuapp.com/") that hosts the 
-   project. The login information is student/cits5506
+1. Alternatively, navigate to the deployed version of the app https://smart-air-quality.herokuapp.com 
+The login information is student/cits5506
 
 ## Authors
 * **Evgeny Pimenov (21469397)**
