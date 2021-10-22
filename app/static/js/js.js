@@ -7,7 +7,7 @@ let base_path = 'http://127.0.0.1:5000/api/v1' //local
 let live_update_on = false
 let updating, chart_refresh
 let chart1, chart2
-let num_readings = 100
+let num_readings = 10
 const device_id = window.appConfig.device_id
 
 //-----------------------------------//

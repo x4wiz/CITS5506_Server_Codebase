@@ -4,8 +4,8 @@ from time import sleep
 import requests
 
 # base_url = 'http://192.168.1.127:5000/api/v1/'
-# base_url = 'http://127.0.0.1:5000/api/v1/'
-base_url = 'https://smart-air-quality.herokuapp.com/api/v1/'
+base_url = 'http://127.0.0.1:5000/api/v1/'
+# base_url = 'https://smart-air-quality.herokuapp.com/api/v1/'
 
 while True:
     temp = str(randint(23, 24))
@@ -26,4 +26,4 @@ while True:
     except:
         print("Something went wrong")
 
-    sleep(10)
+    sleep(2)

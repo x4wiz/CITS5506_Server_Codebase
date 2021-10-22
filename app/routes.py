@@ -10,7 +10,7 @@ from app import app
 from app import db
 from app.forms import LoginForm
 from app.forms import RegistrationForm
-from app.functions.helpers import check_co2_threshold, check_dust_threshold, moving_average
+from app.functions.helpers import check_co2_threshold, check_dust_threshold
 from app.models import User, Data, Device
 
 
